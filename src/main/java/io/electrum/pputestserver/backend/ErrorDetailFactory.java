@@ -16,12 +16,20 @@ public class ErrorDetailFactory {
             (result == null ? "Mandatory fields missing - check server logs." : result.getViolations()));
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
-   
+
    public static Response getNotUniqueUuidErrorDetail(UUID id) {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.DUPLICATE_RECORD);
       errorDetail.setErrorMessage("Message ID (UUID) is not unique.");
       errorDetail.setDetailMessage(id);
+      return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
+   }
+
+   public static Response getUnknownMeterIdErrorDetail(String meterId) {
+      ErrorDetail errorDetail = new ErrorDetail();
+      errorDetail.setErrorType(ErrorDetail.ErrorType.UNKNOWN_CUSTOMER_ACCOUNT);
+      errorDetail.setErrorMessage("Unknown meter ID.");
+      errorDetail.setDetailMessage("This meter ID was not recognised by the system: " + meterId);
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
 }

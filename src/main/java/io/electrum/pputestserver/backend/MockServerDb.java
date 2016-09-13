@@ -13,8 +13,8 @@ import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.PurchaseRequest;
-import io.electrum.prepaidutility.model.ReversalRequest;
 import io.electrum.vas.model.BasicAdvice;
+import io.electrum.vas.model.BasicReversal;
 import io.electrum.vas.model.TenderAdvice;
 import io.electrum.vas.model.Transaction;
 
@@ -36,7 +36,7 @@ public class MockServerDb {
    private static Cache<UUID, FaultReportRequest> faultReportRequests = buildNewCache();
 
    private static Cache<UUID, TenderAdvice> confirmationRequests = buildNewAdviceCache();
-   private static Cache<UUID, ReversalRequest> reversalRequests = buildNewAdviceCache();
+   private static Cache<UUID, BasicReversal> reversalRequests = buildNewAdviceCache();
 
    public static MeterLookupRequest getMeterLookup(UUID uuid) {
       return meterLookups.getIfPresent(uuid);
@@ -58,7 +58,7 @@ public class MockServerDb {
       return confirmationRequests.getIfPresent(uuid);
    }
 
-   public static ReversalRequest getReversalRequest(UUID uuid) {
+   public static BasicReversal getReversalRequest(UUID uuid) {
       return reversalRequests.getIfPresent(uuid);
    }
 
@@ -107,7 +107,7 @@ public class MockServerDb {
       return true;
    }
 
-   public static boolean add(ReversalRequest request) {
+   public static boolean add(BasicReversal request) {
       if (reversalRequests.asMap().containsKey(request.getId())) {
          return false;
       }

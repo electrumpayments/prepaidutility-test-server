@@ -47,10 +47,10 @@
       level="DEBUG"
       additivity="false">
       <AppenderRef
-        ref="RollingFileLog"
+        ref="RollingFileTrace"
         level="DEBUG" />
       <AppenderRef
-        ref="RollingFileTrace"
+        ref="RollingFileLog"
         level="INFO" />
 	  <AppenderRef
         ref="Console"

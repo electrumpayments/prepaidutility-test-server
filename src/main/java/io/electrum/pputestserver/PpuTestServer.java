@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 
+import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.utils.Utils;
 
 public class PpuTestServer extends ResourceConfig {
@@ -24,6 +25,6 @@ public class PpuTestServer extends ResourceConfig {
       packages(PpuTestServer.class.getPackage().getName());
 
       logger.info("initializing backend...");
-      // TODO: initialise backend
+      MockResponseTemplates.init();
    }
 }

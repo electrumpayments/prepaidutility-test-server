@@ -10,7 +10,9 @@ import javax.validation.Validator;
 
 import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
+import io.electrum.prepaidutility.model.PurchaseRequest;
 import io.electrum.vas.model.Institution;
+import io.electrum.vas.model.LedgerAmount;
 import io.electrum.vas.model.Merchant;
 import io.electrum.vas.model.MerchantName;
 import io.electrum.vas.model.Originator;
@@ -22,6 +24,19 @@ public class RequestMessageValidator {
    private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
    public static ValidationResult validate(MeterLookupRequest request) {
+      ValidationResult result = new ValidationResult();
+
+      if (isEmpty(request)) {
+         result.addViolation(new RequestMessageViolation("message", "", "", null));
+         return result;
+      }
+
+      validate(request, result);
+
+      return result;
+   }
+   
+   public static ValidationResult validate(PurchaseRequest request) {
       ValidationResult result = new ValidationResult();
 
       if (isEmpty(request)) {
@@ -54,7 +69,24 @@ public class RequestMessageValidator {
 
       validate(request.getMeter(), result);
    }
+   
+   private static void validate(PurchaseRequest request, ValidationResult result) {
+      validateBasicTranFields(request, result);
 
+      validate(request.getMeter(), result);
+      validate(request.getPurchaseAmount(), "purchaseAmount", result);
+   }
+
+   private static void validate(LedgerAmount amount, String fieldName, ValidationResult result) {
+      if (isEmpty(amount)) {
+         return;
+      }
+      
+      validateValue(amount, fieldName, "amount", result);
+      validateValue(amount, fieldName, "currency", result);
+      validateValue(amount, fieldName, "ledgerIndicator", result);
+   }
+   
    private static void validate(Meter meter, ValidationResult result) {
       if (isEmpty(meter)) {
          return;

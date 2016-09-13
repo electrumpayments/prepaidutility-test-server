@@ -1,5 +1,6 @@
 package io.electrum.pputestserver.backend;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import io.electrum.prepaidutility.model.FaultReportResponse;
@@ -14,7 +15,7 @@ import io.electrum.prepaidutility.model.PurchaseResponse;
  * Response objects for each type are stored in a {@link HashMap} referenced by unique meter ID.
  *
  */
-public class MockResponses {
+public class MockResponseTemplates {
 
    private static HashMap<String, MeterLookupResponse> meterLookupResponses = new HashMap<>();
    private static HashMap<String, PurchaseResponse> purchaseResponses = new HashMap<>();
@@ -37,7 +38,7 @@ public class MockResponses {
       return faultReportResponses.get(meterId);
    }
 
-   public static void init() {
-      // TODO: load data from file
+   public static void init() throws IOException {
+      DataLoader.loadMeterData(meterLookupResponses, "meters.csv");
    }
 }

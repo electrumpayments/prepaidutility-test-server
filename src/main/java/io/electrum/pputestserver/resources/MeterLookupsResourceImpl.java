@@ -5,28 +5,24 @@ import javax.ws.rs.Path;
 import javax.ws.rs.container.AsyncResponse;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.electrum.pputestserver.backend.ErrorDetailFactory;
+import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.utils.Utils;
-import io.electrum.pputestserver.validation.RequestMessageValidator;
-import io.electrum.pputestserver.validation.ValidationResult;
 import io.electrum.prepaidutility.api.IMeterLookupsResource;
 import io.electrum.prepaidutility.api.MeterLookupsResource;
+import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
+import io.electrum.prepaidutility.model.MeterLookupResponse;
 
 @Path("/prepaidutility/v1/meterLookups")
 public class MeterLookupsResourceImpl extends MeterLookupsResource implements IMeterLookupsResource {
 
    static MeterLookupsResourceImpl instance = null;
-   private static final Logger logger = LoggerFactory.getLogger(MeterLookupsResourceImpl.class);
 
    @Override
    protected IMeterLookupsResource getResourceImplementation() {
@@ -39,35 +35,45 @@ public class MeterLookupsResourceImpl extends MeterLookupsResource implements IM
    @Override
    public void createMeterLookup(
          String lookupId,
-         MeterLookupRequest body,
+         MeterLookupRequest requestBody,
          SecurityContext securityContext,
          AsyncResponse asyncResponse,
          Request request,
          HttpServletRequest httpServletRequest,
          HttpHeaders httpHeaders,
          UriInfo uriInfo) {
-      ValidationResult validation = RequestMessageValidator.validate(body);
 
-      if (!validation.isValid()) {
-         logger.error("Invalid request message format");
-         asyncResponse.resume(ErrorDetailFactory.getIllFormattedMessageErrorDetail(validation));
+      Utils.validateRequest(requestBody, asyncResponse);
+
+      Utils.logMessageTrace(requestBody);
+
+      /*
+       * Persist in mock DB
+       */
+      if (!MockServerDb.add(requestBody)) {
+         asyncResponse.resume(ErrorDetailFactory.getNotUniqueUuidErrorDetail(requestBody.getId()));
          return;
       }
 
-      try {
-         logger.debug(Utils.objectToPrettyPrintedJson(body));
-      } catch (JsonProcessingException e) {
-         logger.error("Error processing JSON request message");
-      }
+      /*
+       * Lookup meter
+       */
+      Meter meter = requestBody.getMeter();
+      MeterLookupResponse responseBody = MockResponseTemplates.getMeterLookupResponse(meter.getMeterId());
 
-      if (!MockServerDb.add(body)) {
-         asyncResponse.resume(ErrorDetailFactory.getNotUniqueUuidErrorDetail(body.getId()));
+      /*
+       * Build and send error response if no match is found
+       */
+      if (responseBody == null) {
+         asyncResponse.resume(ErrorDetailFactory.getUnknownMeterIdErrorDetail(meter.getMeterId()));
          return;
       }
 
-      // lookup meter
-
-      // build response
+      /*
+       * Build and send positive response
+       */
+      Utils.copyBaseFieldsFromRequest(responseBody, requestBody);
+      Utils.logMessageTrace(responseBody);
+      asyncResponse.resume(Response.status(Response.Status.ACCEPTED).entity(responseBody).build());
    }
-
 }
