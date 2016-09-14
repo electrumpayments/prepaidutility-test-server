@@ -1,5 +1,6 @@
 package io.electrum.pputestserver.backend;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
@@ -9,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.csvreader.CsvReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.electrum.pputestserver.utils.Utils;
 import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.MeterLookupResponse;
 import io.electrum.prepaidutility.model.PurchaseResponse;
@@ -20,6 +23,13 @@ public class DataLoader {
 
    private static Logger logger = LoggerFactory.getLogger(DataLoader.class);
 
+   /**
+    * Reads a csv file to populate mock meter db
+    * 
+    * @param mapToLoad
+    * @param inputFileName
+    * @throws IOException
+    */
    public static void loadMeterData(HashMap<String, MeterLookupResponse> mapToLoad, String inputFileName)
          throws IOException {
       logger.info("Loading data from file: {}", inputFileName);
@@ -71,8 +81,36 @@ public class DataLoader {
       logger.info("{} entries successfully loaded from file", mapToLoad.size());
    }
 
-   public static void loadPurchaseData(HashMap<String, PurchaseResponse> mapToLoad, String inputFileName) {
-      // TODO
+   /**
+    * Reads a json file for each meterId in the mock meter db and loads is into the mock response db. The file must
+    * contain data for a specific test scenario and its name must be in the form <code>meterId</code>.json.
+    * 
+    * @param meters
+    * @param mapToLoad
+    * @throws IOException
+    */
+   public static void loadPurchaseResponses(
+         HashMap<String, MeterLookupResponse> meters,
+         HashMap<String, PurchaseResponse> mapToLoad) throws IOException {
+      ObjectMapper mapper = Utils.getObjectMapper();
+
+      for (String meterId : meters.keySet()) {
+         PurchaseResponse response = new PurchaseResponse();
+         FileInputStream inputStream = null;
+         try {
+            //TODO: make the path configurable
+            inputStream = new FileInputStream("src/main/resources/" + meterId + ".json");
+            response = mapper.readValue(inputStream, PurchaseResponse.class);
+         } catch (Exception e) {
+            logger.error("Error reading input file: {}", meterId + ".json");
+            e.printStackTrace();
+         } finally {
+            if (inputStream != null) {
+               inputStream.close();
+            }
+         }
+         mapToLoad.put(meterId, response);
+      }
    }
 
 }

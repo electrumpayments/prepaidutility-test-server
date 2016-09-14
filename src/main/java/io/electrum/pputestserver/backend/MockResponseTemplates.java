@@ -40,5 +40,6 @@ public class MockResponseTemplates {
 
    public static void init() throws IOException {
       DataLoader.loadMeterData(meterLookupResponses, "meters.csv");
+      DataLoader.loadPurchaseResponses(meterLookupResponses, purchaseResponses);
    }
 }
