@@ -13,29 +13,29 @@ import io.electrum.pputestserver.backend.ErrorDetailFactory;
 import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.utils.Utils;
-import io.electrum.prepaidutility.api.IMeterLookupsResource;
-import io.electrum.prepaidutility.api.MeterLookupsResource;
+import io.electrum.prepaidutility.api.FaultReportsResource;
+import io.electrum.prepaidutility.api.IFaultReportsResource;
+import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.Meter;
-import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.MeterLookupResponse;
 
-@Path("/prepaidutility/v1/meterLookups")
-public class MeterLookupsResourceImpl extends MeterLookupsResource implements IMeterLookupsResource {
+@Path("/prepaidutility/v1/faultReports")
+public class FaultReportsResourceImpl extends FaultReportsResource implements IFaultReportsResource {
 
-   static MeterLookupsResourceImpl instance = null;
+   static FaultReportsResourceImpl instance = null;
 
    @Override
-   protected IMeterLookupsResource getResourceImplementation() {
+   protected IFaultReportsResource getResourceImplementation() {
       if (instance == null) {
-         instance = new MeterLookupsResourceImpl();
+         instance = new FaultReportsResourceImpl();
       }
       return instance;
    }
 
    @Override
-   public void createMeterLookup(
-         String lookupId,
-         MeterLookupRequest requestBody,
+   public void createFaultReport(
+         String requestId,
+         FaultReportRequest requestBody,
          SecurityContext securityContext,
          AsyncResponse asyncResponse,
          Request request,

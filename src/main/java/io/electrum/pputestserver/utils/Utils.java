@@ -21,9 +21,12 @@ import io.electrum.pputestserver.backend.ErrorDetailFactory;
 import io.electrum.pputestserver.resources.MeterLookupsResourceImpl;
 import io.electrum.pputestserver.validation.RequestMessageValidator;
 import io.electrum.pputestserver.validation.ValidationResult;
+import io.electrum.prepaidutility.model.FaultReportRequest;
+import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
-import io.electrum.prepaidutility.model.MeterLookupResponse;
 import io.electrum.prepaidutility.model.PurchaseRequest;
+import io.electrum.vas.model.BasicAdvice;
+import io.electrum.vas.model.Transaction;
 
 public class Utils {
    private static final Logger logger = LoggerFactory.getLogger(MeterLookupsResourceImpl.class);
@@ -55,7 +58,7 @@ public class Utils {
       return dateFormat;
    }
 
-   public static void copyBaseFieldsFromRequest(MeterLookupResponse responseBody, MeterLookupRequest requestBody) {
+   public static <T extends Transaction> void copyBaseFieldsFromRequest(T responseBody, T requestBody) {
       responseBody.setId(requestBody.getId());
       responseBody.setTime(requestBody.getTime());
       responseBody.setOriginator(requestBody.getOriginator());
@@ -72,23 +75,58 @@ public class Utils {
       }
    }
 
-   public static void validateRequest(MeterLookupRequest requestBody, AsyncResponse asyncResponse) {
+   public static boolean validateRequest(MeterLookupRequest requestBody, AsyncResponse asyncResponse) {
       ValidationResult validation = RequestMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
-         logger.error("Invalid request message format");
-         asyncResponse.resume(ErrorDetailFactory.getIllFormattedMessageErrorDetail(validation));
-         return;
+         sendErrorResponse(validation, asyncResponse);
+         return false;
       }
+      return true;
+   }
+
+   public static boolean validateRequest(PurchaseRequest requestBody, AsyncResponse asyncResponse) {
+      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+
+      if (!validation.isValid()) {
+         sendErrorResponse(validation, asyncResponse);
+         return false;
+      }
+      return true;
    }
    
-   public static void validateRequest(PurchaseRequest requestBody, AsyncResponse asyncResponse) {
+   public static boolean validateRequest(KeyChangeTokenRequest requestBody, AsyncResponse asyncResponse) {
       ValidationResult validation = RequestMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
-         logger.error("Invalid request message format");
-         asyncResponse.resume(ErrorDetailFactory.getIllFormattedMessageErrorDetail(validation));
-         return;
+         sendErrorResponse(validation, asyncResponse);
+         return false;
       }
+      return true;
+   }
+   
+   public static boolean validateRequest(FaultReportRequest requestBody, AsyncResponse asyncResponse) {
+      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+
+      if (!validation.isValid()) {
+         sendErrorResponse(validation, asyncResponse);
+         return false;
+      }
+      return true;
+   }
+   
+   public static <T extends BasicAdvice> boolean validateRequest(T requestBody, AsyncResponse asyncResponse) {
+      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+
+      if (!validation.isValid()) {
+         sendErrorResponse(validation, asyncResponse);
+         return false;
+      }
+      return true;
+   }
+   
+   private static void sendErrorResponse(ValidationResult validation, AsyncResponse asyncResponse) {
+      logger.error("Invalid request message format");
+      asyncResponse.resume(ErrorDetailFactory.getIllFormattedMessageErrorDetail(validation));
    }
 }

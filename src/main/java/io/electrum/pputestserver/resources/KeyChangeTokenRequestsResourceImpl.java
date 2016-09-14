@@ -13,29 +13,30 @@ import io.electrum.pputestserver.backend.ErrorDetailFactory;
 import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.utils.Utils;
-import io.electrum.prepaidutility.api.IMeterLookupsResource;
-import io.electrum.prepaidutility.api.MeterLookupsResource;
+import io.electrum.prepaidutility.api.IKeyChangeTokenRequestsResource;
+import io.electrum.prepaidutility.api.KeyChangeTokenRequestsResource;
+import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
+import io.electrum.prepaidutility.model.KeyChangeTokenResponse;
 import io.electrum.prepaidutility.model.Meter;
-import io.electrum.prepaidutility.model.MeterLookupRequest;
-import io.electrum.prepaidutility.model.MeterLookupResponse;
 
-@Path("/prepaidutility/v1/meterLookups")
-public class MeterLookupsResourceImpl extends MeterLookupsResource implements IMeterLookupsResource {
+@Path("/prepaidutility/v1/keyChangeTokenRequests")
+public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsResource
+      implements IKeyChangeTokenRequestsResource {
 
-   static MeterLookupsResourceImpl instance = null;
+   static KeyChangeTokenRequestsResourceImpl instance = null;
 
    @Override
-   protected IMeterLookupsResource getResourceImplementation() {
+   protected IKeyChangeTokenRequestsResource getResourceImplementation() {
       if (instance == null) {
-         instance = new MeterLookupsResourceImpl();
+         instance = new KeyChangeTokenRequestsResourceImpl();
       }
       return instance;
    }
 
    @Override
-   public void createMeterLookup(
-         String lookupId,
-         MeterLookupRequest requestBody,
+   public void createKeyChangeTokenRequest(
+         String requestId,
+         KeyChangeTokenRequest requestBody,
          SecurityContext securityContext,
          AsyncResponse asyncResponse,
          Request request,
@@ -60,16 +61,17 @@ public class MeterLookupsResourceImpl extends MeterLookupsResource implements IM
       }
 
       /*
-       * Lookup meter
+       * Lookup response corresponding to this meter id
        */
       Meter meter = requestBody.getMeter();
-      MeterLookupResponse responseBody = MockResponseTemplates.getMeterLookupResponse(meter.getMeterId());
+      KeyChangeTokenResponse responseBody = MockResponseTemplates.getKctResponse(meter.getMeterId());
 
       /*
        * Build and send error response if no match is found
        */
       if (responseBody == null) {
-         asyncResponse.resume(ErrorDetailFactory.getUnknownMeterIdErrorDetail(meter.getMeterId()));
+         asyncResponse.resume(
+               ErrorDetailFactory.getNoTestCaseForMeterId("No key change token for meter id: " + meter.getMeterId()));
          return;
       }
 

@@ -80,6 +80,15 @@ public class MockServerDb {
       return true;
    }
 
+   public static boolean add(PurchaseRequest request, UUID originalRequestId) {
+      if (purchaseRequests.asMap().containsKey(originalRequestId)) {
+         return false;
+      }
+
+      purchaseRequests.put(originalRequestId, request);
+      return true;
+   }
+
    public static boolean add(KeyChangeTokenRequest request) {
       if (kctRequests.asMap().containsKey(request.getId())) {
          return false;

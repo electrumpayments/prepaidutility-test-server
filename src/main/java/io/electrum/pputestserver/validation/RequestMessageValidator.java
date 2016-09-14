@@ -8,9 +8,12 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import io.electrum.prepaidutility.model.FaultReportRequest;
+import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.PurchaseRequest;
+import io.electrum.vas.model.BasicAdvice;
 import io.electrum.vas.model.Institution;
 import io.electrum.vas.model.LedgerAmount;
 import io.electrum.vas.model.Merchant;
@@ -35,8 +38,47 @@ public class RequestMessageValidator {
 
       return result;
    }
-   
+
    public static ValidationResult validate(PurchaseRequest request) {
+      ValidationResult result = new ValidationResult();
+
+      if (isEmpty(request)) {
+         result.addViolation(new RequestMessageViolation("message", "", "", null));
+         return result;
+      }
+
+      validate(request, result);
+
+      return result;
+   }
+
+   public static ValidationResult validate(KeyChangeTokenRequest request) {
+      ValidationResult result = new ValidationResult();
+
+      if (isEmpty(request)) {
+         result.addViolation(new RequestMessageViolation("message", "", "", null));
+         return result;
+      }
+
+      validate(request, result);
+
+      return result;
+   }
+
+   public static ValidationResult validate(FaultReportRequest request) {
+      ValidationResult result = new ValidationResult();
+
+      if (isEmpty(request)) {
+         result.addViolation(new RequestMessageViolation("message", "", "", null));
+         return result;
+      }
+
+      validate(request, result);
+
+      return result;
+   }
+
+   public static <T extends BasicAdvice> ValidationResult validate(T request) {
       ValidationResult result = new ValidationResult();
 
       if (isEmpty(request)) {
@@ -69,7 +111,7 @@ public class RequestMessageValidator {
 
       validate(request.getMeter(), result);
    }
-   
+
    private static void validate(PurchaseRequest request, ValidationResult result) {
       validateBasicTranFields(request, result);
 
@@ -77,16 +119,37 @@ public class RequestMessageValidator {
       validate(request.getPurchaseAmount(), "purchaseAmount", result);
    }
 
+   private static void validate(KeyChangeTokenRequest request, ValidationResult result) {
+      validateBasicTranFields(request, result);
+
+      validate(request.getMeter(), result);
+   }
+
+   private static void validate(FaultReportRequest request, ValidationResult result) {
+      validateBasicTranFields(request, result);
+
+      validate(request.getMeter(), result);
+      validateValue(request, "message", "contactNumber", result);
+      validateValue(request, "message", "faultType", result);
+   }
+
+   private static <T extends BasicAdvice> void validate(T request, ValidationResult result) {
+      validateValue(request, "message", "id", result);
+      validateValue(request, "message", "requestId", result);
+      validateValue(request, "message", "time", result);
+      validate(request.getThirdPartyIdentifiers(), result);
+   }
+
    private static void validate(LedgerAmount amount, String fieldName, ValidationResult result) {
       if (isEmpty(amount)) {
          return;
       }
-      
+
       validateValue(amount, fieldName, "amount", result);
       validateValue(amount, fieldName, "currency", result);
       validateValue(amount, fieldName, "ledgerIndicator", result);
    }
-   
+
    private static void validate(Meter meter, ValidationResult result) {
       if (isEmpty(meter)) {
          return;
