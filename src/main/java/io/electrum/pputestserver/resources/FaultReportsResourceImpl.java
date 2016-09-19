@@ -10,14 +10,12 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import io.electrum.pputestserver.backend.ErrorDetailFactory;
-import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.utils.Utils;
 import io.electrum.prepaidutility.api.FaultReportsResource;
 import io.electrum.prepaidutility.api.IFaultReportsResource;
 import io.electrum.prepaidutility.model.FaultReportRequest;
-import io.electrum.prepaidutility.model.Meter;
-import io.electrum.prepaidutility.model.MeterLookupResponse;
+import io.electrum.prepaidutility.model.FaultReportResponse;
 
 @Path("/prepaidutility/v1/faultReports")
 public class FaultReportsResourceImpl extends FaultReportsResource implements IFaultReportsResource {
@@ -60,24 +58,17 @@ public class FaultReportsResourceImpl extends FaultReportsResource implements IF
       }
 
       /*
-       * Lookup meter
-       */
-      Meter meter = requestBody.getMeter();
-      MeterLookupResponse responseBody = MockResponseTemplates.getMeterLookupResponse(meter.getMeterId());
-
-      /*
-       * Build and send error response if no match is found
-       */
-      if (responseBody == null) {
-         asyncResponse.resume(ErrorDetailFactory.getUnknownMeterIdErrorDetail(meter.getMeterId()));
-         return;
-      }
-
-      /*
        * Build and send positive response
        */
+      FaultReportResponse responseBody = new FaultReportResponse();
       Utils.copyBaseFieldsFromRequest(responseBody, requestBody);
+      responseBody.setReference(generateReference(requestBody));
+      responseBody.setDescription("Fault description to be printed on receipt");
       Utils.logMessageTrace(responseBody);
-      asyncResponse.resume(Response.status(Response.Status.ACCEPTED).entity(responseBody).build());
+      asyncResponse.resume(Response.status(Response.Status.CREATED).entity(responseBody).build());
+   }
+
+   private static String generateReference(FaultReportRequest requestBody) {
+      return requestBody.getTime().toString() + requestBody.getOriginator().getTerminalId();
    }
 }

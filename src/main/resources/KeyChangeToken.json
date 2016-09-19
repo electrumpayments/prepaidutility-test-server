@@ -22,22 +22,6 @@
 			},
 
 			"token": "22222222222222222222"
-		},
-
-		{
-			"tokenType": "STD",
-			"units": 73.8,
-			"amount": 
-			{
-				"amount": 8600,
-				"currency": 710,
-				"tax": 1400,
-				"taxType": "VAT",
-				"taxRate": 14.0
-			},
-
-			"receiptNum": "RCT60001",
-			"token": "33333333333333333333"
 		}
 	]
 }

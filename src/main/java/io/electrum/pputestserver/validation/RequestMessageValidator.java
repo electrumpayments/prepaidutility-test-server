@@ -13,12 +13,14 @@ import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.PurchaseRequest;
-import io.electrum.vas.model.BasicAdvice;
+import io.electrum.vas.model.BasicReversal;
 import io.electrum.vas.model.Institution;
 import io.electrum.vas.model.LedgerAmount;
 import io.electrum.vas.model.Merchant;
 import io.electrum.vas.model.MerchantName;
 import io.electrum.vas.model.Originator;
+import io.electrum.vas.model.Tender;
+import io.electrum.vas.model.TenderAdvice;
 import io.electrum.vas.model.ThirdPartyIdentifier;
 import io.electrum.vas.model.Transaction;
 
@@ -78,7 +80,20 @@ public class RequestMessageValidator {
       return result;
    }
 
-   public static <T extends BasicAdvice> ValidationResult validate(T request) {
+   public static ValidationResult validate(TenderAdvice request) {
+      ValidationResult result = new ValidationResult();
+
+      if (isEmpty(request)) {
+         result.addViolation(new RequestMessageViolation("message", "", "", null));
+         return result;
+      }
+
+      validate(request, result);
+
+      return result;
+   }
+   
+   public static ValidationResult validate(BasicReversal request) {
       ValidationResult result = new ValidationResult();
 
       if (isEmpty(request)) {
@@ -133,10 +148,19 @@ public class RequestMessageValidator {
       validateValue(request, "message", "faultType", result);
    }
 
-   private static <T extends BasicAdvice> void validate(T request, ValidationResult result) {
+   private static void validate(TenderAdvice request, ValidationResult result) {
       validateValue(request, "message", "id", result);
       validateValue(request, "message", "requestId", result);
       validateValue(request, "message", "time", result);
+      validateTenders(request.getTenders(), result);
+      validate(request.getThirdPartyIdentifiers(), result);
+   }
+   
+   private static void validate(BasicReversal request, ValidationResult result) {
+      validateValue(request, "message", "id", result);
+      validateValue(request, "message", "requestId", result);
+      validateValue(request, "message", "time", result);
+      validateValue(request, "message", "reversalReason", result);
       validate(request.getThirdPartyIdentifiers(), result);
    }
 
@@ -188,6 +212,19 @@ public class RequestMessageValidator {
 
    }
 
+   private static void validate(Tender tender, ValidationResult result) {
+      if (isEmpty(tender)) {
+         return;
+      }
+
+      validateValue(tender, "tender", "accountType", result);
+      validate(tender.getAmount(), "amount", result);
+      validateValue(tender, "tender", "cardNumber", result);
+      validateValue(tender, "tender", "reference", result);
+      validateValue(tender, "tender", "tenderType", result);
+
+   }
+
    private static void validate(List<ThirdPartyIdentifier> thirdPartyIdentifiers, ValidationResult result) {
       if (isEmpty(thirdPartyIdentifiers)) {
          return;
@@ -195,6 +232,16 @@ public class RequestMessageValidator {
 
       for (ThirdPartyIdentifier thirdPartyIdentifier : thirdPartyIdentifiers) {
          validate(thirdPartyIdentifier, result);
+      }
+   }
+
+   private static void validateTenders(List<Tender> tenders, ValidationResult result) {
+      if (isEmpty(tenders)) {
+         return;
+      }
+
+      for (Tender tender : tenders) {
+         validate(tender, result);
       }
    }
 

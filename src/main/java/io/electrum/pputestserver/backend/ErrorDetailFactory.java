@@ -32,7 +32,25 @@ public class ErrorDetailFactory {
       errorDetail.setDetailMessage("This meter ID was not recognised by the system: " + meterId);
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
+
+   public static Response getInvalidRequestAmount() {
+      ErrorDetail errorDetail = new ErrorDetail();
+      errorDetail.setErrorType(ErrorDetail.ErrorType.INVALID_AMOUNT);
+      errorDetail.setErrorMessage("Invalid request amount");
+      errorDetail.setDetailMessage(
+            "Requested purchase amount does not correspond to the amount specified for this test case. See minAmount and maxAmount in meter lookup response for allowed values.");
+      return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
+   }
    
+   public static Response getUpstreamTimeout() {
+      ErrorDetail errorDetail = new ErrorDetail();
+      errorDetail.setErrorType(ErrorDetail.ErrorType.UPSTREAM_UNAVAILABLE);
+      errorDetail.setErrorMessage("Timeout");
+      errorDetail.setDetailMessage(
+            "No response from upstream service");
+      return Response.status(Response.Status.GATEWAY_TIMEOUT).entity(errorDetail).build();
+   }
+
    public static Response getNoTestCaseForMeterId(String message) {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.GENERAL_ERROR);

@@ -1,5 +1,7 @@
 package io.electrum.pputestserver.resources;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.ws.rs.container.AsyncResponse;
@@ -17,7 +19,6 @@ import io.electrum.prepaidutility.api.IKeyChangeTokenRequestsResource;
 import io.electrum.prepaidutility.api.KeyChangeTokenRequestsResource;
 import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenResponse;
-import io.electrum.prepaidutility.model.Meter;
 
 @Path("/prepaidutility/v1/keyChangeTokenRequests")
 public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsResource
@@ -61,25 +62,15 @@ public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsRe
       }
 
       /*
-       * Lookup response corresponding to this meter id
+       * Lookup mock response
        */
-      Meter meter = requestBody.getMeter();
-      KeyChangeTokenResponse responseBody = MockResponseTemplates.getKctResponse(meter.getMeterId());
-
-      /*
-       * Build and send error response if no match is found
-       */
-      if (responseBody == null) {
-         asyncResponse.resume(
-               ErrorDetailFactory.getNoTestCaseForMeterId("No key change token for meter id: " + meter.getMeterId()));
-         return;
+      try {
+         KeyChangeTokenResponse responseBody = MockResponseTemplates.getKctResponse();
+         Utils.copyBaseFieldsFromRequest(responseBody, requestBody);
+         Utils.logMessageTrace(responseBody);
+         asyncResponse.resume(Response.status(Response.Status.CREATED).entity(responseBody).build());
+      } catch (IOException e) {
+         asyncResponse.resume(ErrorDetailFactory.getNoTestCaseForMeterId("No key change token found"));
       }
-
-      /*
-       * Build and send positive response
-       */
-      Utils.copyBaseFieldsFromRequest(responseBody, requestBody);
-      Utils.logMessageTrace(responseBody);
-      asyncResponse.resume(Response.status(Response.Status.ACCEPTED).entity(responseBody).build());
    }
 }

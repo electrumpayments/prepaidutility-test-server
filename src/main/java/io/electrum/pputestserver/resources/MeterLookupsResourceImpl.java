@@ -78,6 +78,6 @@ public class MeterLookupsResourceImpl extends MeterLookupsResource implements IM
        */
       Utils.copyBaseFieldsFromRequest(responseBody, requestBody);
       Utils.logMessageTrace(responseBody);
-      asyncResponse.resume(Response.status(Response.Status.ACCEPTED).entity(responseBody).build());
+      asyncResponse.resume(Response.status(Response.Status.CREATED).entity(responseBody).build());
    }
 }

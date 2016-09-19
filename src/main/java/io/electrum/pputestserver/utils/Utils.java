@@ -25,7 +25,8 @@ import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.PurchaseRequest;
-import io.electrum.vas.model.BasicAdvice;
+import io.electrum.vas.model.BasicReversal;
+import io.electrum.vas.model.TenderAdvice;
 import io.electrum.vas.model.Transaction;
 
 public class Utils {
@@ -94,7 +95,7 @@ public class Utils {
       }
       return true;
    }
-   
+
    public static boolean validateRequest(KeyChangeTokenRequest requestBody, AsyncResponse asyncResponse) {
       ValidationResult validation = RequestMessageValidator.validate(requestBody);
 
@@ -104,7 +105,7 @@ public class Utils {
       }
       return true;
    }
-   
+
    public static boolean validateRequest(FaultReportRequest requestBody, AsyncResponse asyncResponse) {
       ValidationResult validation = RequestMessageValidator.validate(requestBody);
 
@@ -114,8 +115,8 @@ public class Utils {
       }
       return true;
    }
-   
-   public static <T extends BasicAdvice> boolean validateRequest(T requestBody, AsyncResponse asyncResponse) {
+
+   public static boolean validateRequest(TenderAdvice requestBody, AsyncResponse asyncResponse) {
       ValidationResult validation = RequestMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
@@ -124,7 +125,17 @@ public class Utils {
       }
       return true;
    }
-   
+
+   public static boolean validateRequest(BasicReversal requestBody, AsyncResponse asyncResponse) {
+      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+
+      if (!validation.isValid()) {
+         sendErrorResponse(validation, asyncResponse);
+         return false;
+      }
+      return true;
+   }
+
    private static void sendErrorResponse(ValidationResult validation, AsyncResponse asyncResponse) {
       logger.error("Invalid request message format");
       asyncResponse.resume(ErrorDetailFactory.getIllFormattedMessageErrorDetail(validation));

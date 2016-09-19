@@ -18,6 +18,7 @@ import io.electrum.prepaidutility.model.MeterLookupResponse;
 import io.electrum.prepaidutility.model.PurchaseResponse;
 import io.electrum.prepaidutility.model.Utility;
 import io.electrum.vas.model.Customer;
+import io.electrum.vas.model.LedgerAmount;
 
 public class DataLoader {
 
@@ -63,10 +64,16 @@ public class DataLoader {
             utility.setClientId(csv.get(11));
             utility.setMessage(csv.get(12));
 
+            LedgerAmount testCaseAmount = new LedgerAmount();
+            testCaseAmount.setAmount(new Long(csv.get(13)));
+            testCaseAmount.setCurrency(csv.get(14));
+
             response = new MeterLookupResponse();
             response.setMeter(meter);
             response.setCustomer(customer);
             response.setUtility(utility);
+            response.minAmount(testCaseAmount);
+            response.maxAmount(testCaseAmount);
 
             mapToLoad.put(meter.getMeterId(), response);
          }
@@ -97,8 +104,9 @@ public class DataLoader {
       for (String meterId : meters.keySet()) {
          PurchaseResponse response = new PurchaseResponse();
          FileInputStream inputStream = null;
+
          try {
-            //TODO: make the path configurable
+            // TODO: make the path configurable
             inputStream = new FileInputStream("src/main/resources/" + meterId + ".json");
             response = mapper.readValue(inputStream, PurchaseResponse.class);
          } catch (Exception e) {
@@ -109,8 +117,20 @@ public class DataLoader {
                inputStream.close();
             }
          }
+
+         logger.info("Loading data from file: {}", meterId + ".json");
+
+         // Set meter, customer, utility info
+         response.setMeter(meters.get(meterId).getMeter());
+         response.setCustomer(meters.get(meterId).getCustomer());
+         response.setUtility(meters.get(meterId).getUtility());
+
          mapToLoad.put(meterId, response);
       }
+   }
+
+   public static void loadFaultDescriptions(HashMap<String, String> descriptions) {
+      
    }
 
 }
