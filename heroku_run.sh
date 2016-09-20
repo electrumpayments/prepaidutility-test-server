@@ -1,0 +1,1 @@
+java $JAVA_OPTS -jar target/prepaidutility-test-server-1.0.0-jar-with-dependencies.jar $PORT
