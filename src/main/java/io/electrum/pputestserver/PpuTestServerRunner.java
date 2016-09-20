@@ -20,7 +20,6 @@ public class PpuTestServerRunner {
    private static org.slf4j.Logger logger = LoggerFactory.getLogger(PpuTestServerRunner.class);
 
    public static void main(String[] args) throws Exception {
-      // TODO: add some funky ascii art
       logger.info("--- STARTING PREPAID UTILITY TEST SERVER ---");
 
       try {

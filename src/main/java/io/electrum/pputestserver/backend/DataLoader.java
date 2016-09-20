@@ -128,9 +128,4 @@ public class DataLoader {
          mapToLoad.put(meterId, response);
       }
    }
-
-   public static void loadFaultDescriptions(HashMap<String, String> descriptions) {
-      
-   }
-
 }

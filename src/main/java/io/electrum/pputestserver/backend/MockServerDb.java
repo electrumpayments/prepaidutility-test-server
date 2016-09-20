@@ -3,9 +3,6 @@ package io.electrum.pputestserver.backend;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
@@ -26,8 +23,6 @@ import io.electrum.vas.model.Transaction;
  * 
  */
 public class MockServerDb {
-   private static final Logger logger = LoggerFactory.getLogger(MockServerDb.class);
-
    private static int expireAfterMinutes = 30;
 
    private static Cache<UUID, MeterLookupRequest> meterLookups = buildNewCache();
