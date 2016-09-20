@@ -27,9 +27,6 @@ dependencies:
 test:
   override:
     - mvn clean install -DskipTests
-    - docker build -t="ppu-test-server" ./target
-    - docker run -d -p 8080:8080 --name ppu-test-server_container ppu-test-server
-    - ~/circlecitools/bin/waitForServer.sh localhost:8080 500
     - ./test/postman/run_tests.sh . ./test/postman
 
 deployment:
