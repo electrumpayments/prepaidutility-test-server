@@ -25,6 +25,14 @@ public class ErrorDetailFactory {
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
 
+   public static Response getInconsistentUuidErrorDetail(String pathId, UUID bodyUuid) {
+      ErrorDetail errorDetail = new ErrorDetail();
+      errorDetail.setErrorType(ErrorDetail.ErrorType.FORMAT_ERROR);
+      errorDetail.setErrorMessage("Message ID (UUID) is not the same as ID path parameter.");
+      errorDetail.setDetailMessage("Message ID: " + bodyUuid.toString() + "; ID path parameter: " + pathId);
+      return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
+   }
+
    public static Response getUnknownMeterIdErrorDetail(String meterId) {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.UNKNOWN_CUSTOMER_ACCOUNT);
@@ -41,13 +49,12 @@ public class ErrorDetailFactory {
             "Requested purchase amount does not correspond to the amount specified for this test case. See minAmount and maxAmount in meter lookup response for allowed values.");
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
-   
+
    public static Response getUpstreamTimeout() {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.UPSTREAM_UNAVAILABLE);
       errorDetail.setErrorMessage("Timeout");
-      errorDetail.setDetailMessage(
-            "No response from upstream service");
+      errorDetail.setDetailMessage("No response from upstream service");
       return Response.status(Response.Status.GATEWAY_TIMEOUT).entity(errorDetail).build();
    }
 

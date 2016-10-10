@@ -57,11 +57,15 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
        * Log incoming message trace
        */
       Utils.logMessageTrace(requestBody);
-      
+
       /*
        * Validate request
        */
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
+         return;
+      }
+      if (!Utils.isUuidConsistent(purchaseId, requestBody.getId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(purchaseId, requestBody.getId()));
          return;
       }
 
@@ -121,7 +125,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       Meter meter = requestBody.getMeter();
       PurchaseResponse responseBody = MockResponseTemplates.getPurchaseResponse(meter.getMeterId());
 
-      /* 
+      /*
        * Simulate timeout for retry scenarios
        */
       if (isRetry(meter.getMeterId())) {

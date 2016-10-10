@@ -3,6 +3,7 @@ package io.electrum.pputestserver.utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import javax.ws.rs.container.AsyncResponse;
 
@@ -74,6 +75,13 @@ public class Utils {
       } catch (JsonProcessingException e) {
          logger.error("Error processing JSON request message");
       }
+   }
+   
+   public static boolean isUuidConsistent(String pathId, UUID bodyUuid) {
+      if (pathId == null || bodyUuid == null) {
+         return false;
+      }
+      return pathId.equals(bodyUuid.toString());
    }
 
    public static boolean validateRequest(MeterLookupRequest requestBody, AsyncResponse asyncResponse) {

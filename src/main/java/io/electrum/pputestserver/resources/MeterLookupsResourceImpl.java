@@ -53,6 +53,10 @@ public class MeterLookupsResourceImpl extends MeterLookupsResource implements IM
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
+      if (!Utils.isUuidConsistent(lookupId, requestBody.getId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(lookupId, requestBody.getId()));
+         return;
+      }
 
       /*
        * Persist in mock DB

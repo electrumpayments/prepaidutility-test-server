@@ -55,6 +55,10 @@ public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsRe
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
+      if (!Utils.isUuidConsistent(requestId, requestBody.getId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(requestId, requestBody.getId()));
+         return;
+      }
 
       /*
        * Persist in mock DB
