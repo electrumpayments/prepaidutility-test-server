@@ -24,13 +24,13 @@ import io.electrum.vas.model.TenderAdvice;
 import io.electrum.vas.model.ThirdPartyIdentifier;
 import io.electrum.vas.model.Transaction;
 
-public class RequestMessageValidator {
+public class IncomingMessageValidator {
 
    private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
    public static ValidationResult validate(MeterLookupRequest request) {
       ValidationResult result = new ValidationResult();
-
+      
       if (isEmpty(request)) {
          result.addViolation(new RequestMessageViolation("message", "", "", null));
          return result;

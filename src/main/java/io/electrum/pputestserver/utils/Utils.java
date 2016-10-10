@@ -20,7 +20,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 import io.electrum.pputestserver.backend.ErrorDetailFactory;
 import io.electrum.pputestserver.resources.MeterLookupsResourceImpl;
-import io.electrum.pputestserver.validation.RequestMessageValidator;
+import io.electrum.pputestserver.validation.IncomingMessageValidator;
 import io.electrum.pputestserver.validation.ValidationResult;
 import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
@@ -85,7 +85,7 @@ public class Utils {
    }
 
    public static boolean validateRequest(MeterLookupRequest requestBody, AsyncResponse asyncResponse) {
-      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+      ValidationResult validation = IncomingMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
          sendErrorResponse(validation, asyncResponse);
@@ -95,7 +95,7 @@ public class Utils {
    }
 
    public static boolean validateRequest(PurchaseRequest requestBody, AsyncResponse asyncResponse) {
-      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+      ValidationResult validation = IncomingMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
          sendErrorResponse(validation, asyncResponse);
@@ -105,7 +105,7 @@ public class Utils {
    }
 
    public static boolean validateRequest(KeyChangeTokenRequest requestBody, AsyncResponse asyncResponse) {
-      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+      ValidationResult validation = IncomingMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
          sendErrorResponse(validation, asyncResponse);
@@ -115,7 +115,7 @@ public class Utils {
    }
 
    public static boolean validateRequest(FaultReportRequest requestBody, AsyncResponse asyncResponse) {
-      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+      ValidationResult validation = IncomingMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
          sendErrorResponse(validation, asyncResponse);
@@ -125,7 +125,7 @@ public class Utils {
    }
 
    public static boolean validateRequest(TenderAdvice requestBody, AsyncResponse asyncResponse) {
-      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+      ValidationResult validation = IncomingMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
          sendErrorResponse(validation, asyncResponse);
@@ -135,7 +135,7 @@ public class Utils {
    }
 
    public static boolean validateRequest(BasicReversal requestBody, AsyncResponse asyncResponse) {
-      ValidationResult validation = RequestMessageValidator.validate(requestBody);
+      ValidationResult validation = IncomingMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {
          sendErrorResponse(validation, asyncResponse);
