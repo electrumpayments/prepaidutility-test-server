@@ -12,8 +12,7 @@ public class ErrorDetailFactory {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.FORMAT_ERROR);
       errorDetail.setErrorMessage("See error detail for format errors");
-      errorDetail.setDetailMessage(
-            (result == null ? "Mandatory fields missing - check server logs." : result.getViolations()));
+      errorDetail.setDetailMessage((result == null ? "Mandatory fields missing." : result.getViolations()));
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
 
