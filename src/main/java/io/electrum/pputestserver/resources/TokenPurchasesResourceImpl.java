@@ -64,8 +64,8 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
-      if (!Utils.isUuidConsistent(purchaseId, requestBody.getId())) {
-         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(purchaseId, requestBody.getId()));
+      if (!Utils.isUuidConsistent(confirmationId, requestBody.getId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(confirmationId, requestBody.getId()));
          return;
       }
 
@@ -103,13 +103,20 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
          HttpHeaders httpHeaders,
          UriInfo uriInfo) {
       /*
+       * Log incoming message trace
+       */
+      Utils.logMessageTrace(requestBody);
+      
+      /*
        * Validate request
        */
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
-
-      Utils.logMessageTrace(requestBody);
+      if (!Utils.isUuidConsistent(purchaseId, requestBody.getId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(purchaseId, requestBody.getId()));
+         return;
+      }
 
       /*
        * Persist in mock DB
@@ -174,13 +181,20 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
          HttpHeaders httpHeaders,
          UriInfo uriInfo) {
       /*
+       * Log incoming message trace
+       */
+      Utils.logMessageTrace(requestBody);
+      
+      /*
        * Validate request
        */
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
-
-      Utils.logMessageTrace(requestBody);
+      if (!Utils.isUuidConsistent(retryId, requestBody.getId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(retryId, requestBody.getId()));
+         return;
+      }
 
       /*
        * Lookup original request, if not found, create new
@@ -235,13 +249,20 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
          HttpHeaders httpHeaders,
          UriInfo uriInfo) {
       /*
+       * Log incoming message trace
+       */
+      Utils.logMessageTrace(requestBody);
+      
+      /*
        * Validate request
        */
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
-
-      Utils.logMessageTrace(requestBody);
+      if (!Utils.isUuidConsistent(reversalId, requestBody.getId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(reversalId, requestBody.getId()));
+         return;
+      }
 
       /*
        * Lookup original request

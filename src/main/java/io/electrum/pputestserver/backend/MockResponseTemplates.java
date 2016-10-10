@@ -31,6 +31,10 @@ public class MockResponseTemplates {
    public static MeterLookupResponse getMeterLookupResponse(String meterId) {
       return meterLookupResponses.get(meterId);
    }
+   
+   public static boolean meterExists(String meterId) {
+      return meterLookupResponses.containsKey(meterId);
+   }
 
    public static PurchaseResponse getPurchaseResponse(String meterId) {
       return purchaseResponses.get(meterId);
@@ -51,7 +55,6 @@ public class MockResponseTemplates {
       FileInputStream inputStream = null;
 
       try {
-         // TODO: make the path configurable
          inputStream = new FileInputStream("src/main/resources/" + "KeyChangeToken.json");
          response = mapper.readValue(inputStream, KeyChangeTokenResponse.class);
       } catch (Exception e) {
