@@ -41,13 +41,16 @@ public class FaultReportsResourceImpl extends FaultReportsResource implements IF
          HttpHeaders httpHeaders,
          UriInfo uriInfo) {
       /*
+       * Log incoming message trace
+       */
+      Utils.logMessageTrace(requestBody);
+      
+      /*
        * Validate request
        */
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
-
-      Utils.logMessageTrace(requestBody);
 
       /*
        * Persist in mock DB
