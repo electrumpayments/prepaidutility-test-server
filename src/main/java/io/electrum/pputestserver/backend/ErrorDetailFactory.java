@@ -57,12 +57,11 @@ public class ErrorDetailFactory {
       return Response.status(Response.Status.GATEWAY_TIMEOUT).entity(errorDetail).build();
    }
 
-   public static Response getNoTestCaseForMeterId(String message) {
+   public static Response getInternalServerError(String message) {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.GENERAL_ERROR);
-      errorDetail.setErrorMessage("No test case associated with meter ID");
-      errorDetail.setDetailMessage(message);
-      return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
+      errorDetail.setErrorMessage(message);
+      return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorDetail).build();
    }
 
    public static Response getOriginalRequestNotFound(UUID originalReqId) {
