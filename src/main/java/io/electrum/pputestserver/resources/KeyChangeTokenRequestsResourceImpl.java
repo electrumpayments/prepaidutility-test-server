@@ -19,6 +19,7 @@ import io.electrum.prepaidutility.api.IKeyChangeTokenRequestsResource;
 import io.electrum.prepaidutility.api.KeyChangeTokenRequestsResource;
 import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenResponse;
+import io.electrum.prepaidutility.model.Meter;
 
 @Path("/prepaidutility/v1/keyChangeTokenRequests")
 public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsResource
@@ -67,6 +68,15 @@ public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsRe
          asyncResponse.resume(ErrorDetailFactory.getNotUniqueUuidErrorDetail(requestBody.getId()));
          return;
       }
+      
+      /*
+       * Build and send error response if meter ID is unknown
+       */
+      Meter meter = requestBody.getMeter();
+      if (!MockResponseTemplates.meterExists(meter.getMeterId())) {
+         asyncResponse.resume(ErrorDetailFactory.getUnknownMeterIdErrorDetail(meter.getMeterId()));
+         return;
+      }
 
       /*
        * Lookup mock response
@@ -77,7 +87,7 @@ public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsRe
          Utils.logMessageTrace(responseBody);
          asyncResponse.resume(Response.status(Response.Status.CREATED).entity(responseBody).build());
       } catch (IOException e) {
-         asyncResponse.resume(ErrorDetailFactory.getNoTestCaseForMeterId("No key change token found"));
+         asyncResponse.resume(ErrorDetailFactory.getInternalServerError("Error reading data"));
       }
    }
 }

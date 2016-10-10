@@ -10,12 +10,14 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import io.electrum.pputestserver.backend.ErrorDetailFactory;
+import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.utils.Utils;
 import io.electrum.prepaidutility.api.FaultReportsResource;
 import io.electrum.prepaidutility.api.IFaultReportsResource;
 import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.FaultReportResponse;
+import io.electrum.prepaidutility.model.Meter;
 
 @Path("/prepaidutility/v1/faultReports")
 public class FaultReportsResourceImpl extends FaultReportsResource implements IFaultReportsResource {
@@ -44,7 +46,7 @@ public class FaultReportsResourceImpl extends FaultReportsResource implements IF
        * Log incoming message trace
        */
       Utils.logMessageTrace(requestBody);
-      
+
       /*
        * Validate request
        */
@@ -61,6 +63,15 @@ public class FaultReportsResourceImpl extends FaultReportsResource implements IF
        */
       if (!MockServerDb.add(requestBody)) {
          asyncResponse.resume(ErrorDetailFactory.getNotUniqueUuidErrorDetail(requestBody.getId()));
+         return;
+      }
+
+      /*
+       * Build and send error response if meter ID is unknown
+       */
+      Meter meter = requestBody.getMeter();
+      if (!MockResponseTemplates.meterExists(meter.getMeterId())) {
+         asyncResponse.resume(ErrorDetailFactory.getUnknownMeterIdErrorDetail(meter.getMeterId()));
          return;
       }
 
