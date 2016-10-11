@@ -1,0 +1,43 @@
+{
+	"utilityType": "Electricity",
+	"tokens": 
+	[
+		{
+			"tokenType": "KC",
+			"units": 0,
+			"amount": 
+			{
+				"amount": 0
+			},
+
+			"token": "11111111111111111111"
+		},
+
+		{
+			"tokenType": "KC",
+			"units": 0,
+			"amount": 
+			{
+				"amount": 0
+			},
+
+			"token": "22222222222222222222"
+		},
+
+		{
+			"tokenType": "STD",
+			"units": 73.8,
+			"amount": 
+			{
+				"amount": 8600,
+				"currency": 710,
+				"tax": 1400,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"receiptNum": "RCT60001",
+			"token": "33333333333333333333"
+		}
+	]
+}

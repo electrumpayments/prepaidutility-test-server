@@ -1,0 +1,27 @@
+{
+	"utilityType": "Electricity",
+	"tokens": 
+	[
+		{
+			"tokenType": "KC",
+			"units": 0,
+			"amount": 
+			{
+				"amount": 0
+			},
+
+			"token": "11111111111111111111"
+		},
+
+		{
+			"tokenType": "KC",
+			"units": 0,
+			"amount": 
+			{
+				"amount": 0
+			},
+
+			"token": "22222222222222222222"
+		}
+	]
+}

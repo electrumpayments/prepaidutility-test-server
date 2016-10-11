@@ -1,0 +1,29 @@
+{
+	"printableSlip": 
+	{
+		"lines": 
+		[
+			{
+				"text": "---    Slip Line 1    ---",
+				"fontWidthScaleFactor": 2,
+				"fontHeightScaleFactor": 2
+			},
+
+			{
+				"text": "---    Slip Line 2    ---"
+			},
+
+			{
+				"text": "---    Slip Line 3    ---"
+			},
+
+			{
+				"text": "---    Slip Line 4    ---"
+			},
+
+			{
+				"text": "---    Slip Line 5    ---"
+			}
+		]
+	}
+}

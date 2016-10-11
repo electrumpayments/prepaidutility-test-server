@@ -1,0 +1,37 @@
+{
+	"utilityType": "Electricity",
+	"tokens": 
+	[
+		{
+			"tokenType": "STD",
+			"units": 73.8,
+			"amount": 
+			{
+				"amount": 8600,
+				"currency": 710,
+				"tax": 1400,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"receiptNum": "RCT30001",
+			"token": "00000000000000000000"
+		},
+
+		{
+			"tokenType": "BSST",
+			"units": 50.0,
+			"amount": 
+			{
+				"amount": 0,
+				"currency": 710,
+				"tax": 0,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"receiptNum": "RCT30002",
+			"token": "11111111111111111111"
+		}
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"utilityType": "Electricity",
+	"tokens": 
+	[
+		{
+			"tokenType": "BSST",
+			"units": 50.0,
+			"amount": 
+			{
+				"amount": 0,
+				"currency": 710,
+				"tax": 0,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"receiptNum": "RCT20001",
+			"token": "00000000000000000000"
+		}
+	]
+}

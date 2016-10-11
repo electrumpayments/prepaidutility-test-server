@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- NOTE: For regex help with PatternLayout: https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html -->
+
+
+<Configuration
+  status="WARN"
+  monitorInterval="5">
+  <Appenders>
+    <Console
+      name="Console"
+      target="SYSTEM_OUT">
+      <PatternLayout pattern="%d %5p (%C{1}:%M:%L) - %m%n" />
+    </Console>
+	
+    <RollingFile
+      name="RollingFileTrace"
+      fileName="log/ppu_test_server_trace.log"
+      filePattern="log/rollover/ppu_test_server_trace-%d{yyyy-MM-dd}.log">
+      <PatternLayout pattern="%d %5p (%C{1}:%M) - %m%n" />
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy interval="1" />
+      </Policies>
+    </RollingFile>
+
+    <RollingFile
+      name="RollingFileLog"
+
+      fileName="log/ppu_test_server_log.log"
+      filePattern="log/rollover/ppu_test_server_log-%d{yyyy-MM-dd}.log">
+      <PatternLayout pattern="%d %5p (%C{1}:%M) - %m%n" />
+      <Policies>
+        <OnStartupTriggeringPolicy />
+        <TimeBasedTriggeringPolicy interval="1" />       
+      </Policies>
+    </RollingFile>
+		
+  </Appenders>
+
+  <Loggers>
+    <Root level="INFO">
+      <AppenderRef ref="Console" />
+    </Root>
+    <Logger
+      name="io.electrum.pputestserver"
+      level="DEBUG"
+      additivity="false">
+      <AppenderRef
+        ref="RollingFileTrace"
+        level="DEBUG" />
+      <AppenderRef
+        ref="RollingFileLog"
+        level="INFO" />
+	  <AppenderRef
+        ref="Console"
+        level="DEBUG" /> 
+    </Logger>
+  </Loggers>
+</Configuration>

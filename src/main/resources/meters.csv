@@ -1,0 +1,12 @@
+meterId,supplyGroupCode,keyRevisionNum,tariffIndex,tokenTechCode,firstName,lastName,address,utilName,utilAddress,vatRegNum,clientId,utilMessage,testCaseAmount,currency
+TS0000000001,000001,1,01,02,Pierre,De Wet,21 Dorp Straat,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,10000,710
+TS0000000002,000001,1,01,02,Siphesihle,Mwamure,14 1st Street,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,0,710
+TS0000000003,000001,1,01,02,Mohamed,Kaifa,56 Prentice Road,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,10000,710
+TS0000000004,000001,1,01,02,Kgosietsile,Zono,34 Mota Street,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,10000,710
+TS0000000005,000001,1,01,02,Ibraheem,Davids,7 Adams Street,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,5000,710
+TS0000000006,000001,1,01,02,Zukile,Maqoba,9 Mahlangu Street,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,10000,710
+TS0000000007,000001,1,01,02,John,Palmer,31 Milner Road,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,20000,710
+TS0000000008,000001,1,01,02,Kgotso,Phiri,52 Ntombela Street,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,20000,710
+TS0000000009,000001,1,01,02,Janine,Oosthuizen,301 Kerk Straat,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,20000,710
+TS0000000010,000001,1,01,02,Peter,Dyton,1 Elands Drive,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,10000,710
+TS0000000011,000001,1,01,02,Ruth,Cupido,4 Meyer Street,Electrum Test Server,The Cloud,0000000000,0001,This is a message to the customer,10000,710

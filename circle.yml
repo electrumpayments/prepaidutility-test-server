@@ -1,0 +1,36 @@
+machine:
+  timezone:
+    Africa/Johannesburg
+  java:
+    version: oraclejdk7
+  node:
+    version: 6.2.2
+  services:
+    - docker   
+
+general:
+  artifacts:
+    - log
+
+dependencies:
+  pre:
+    - npm install -g newman
+    # copy some utilities over from github
+    - git clone git@github.com:electrumpayments/circlecitools.git ~/circlecitools
+    - chmod +x ~/circlecitools/bin/*.sh
+    # a custom maven settings file ensures we can talk to our artifactory
+    - cp ~/circlecitools/config/maven/settings.xml ~/.m2/settings.xml
+    # setup our git account
+    - git config --global user.email "circleci@electrum.co.za"
+    - git config --global user.name "Another Electrum Robot"
+    
+test:
+  override:
+    - mvn clean install -DskipTests
+    - ./test/postman/run_tests.sh . ./test/postman
+
+deployment:
+  production:
+    branch: master
+    heroku:
+      appname: ppu-test-server

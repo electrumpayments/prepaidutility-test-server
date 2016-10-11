@@ -1,0 +1,50 @@
+{
+	"utilityType": "Electricity",
+	"tokens": 
+	[
+		{
+			"tokenType": "STD",
+			"units": 73.8,
+			"amount": 
+			{
+				"amount": 8600,
+				"currency": 710,
+				"tax": 1400,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"receiptNum": "RCT90001",
+			"token": "00000000000000000000"
+		}
+	],
+
+	"serviceCharges": 
+	[
+		{
+			"amount": 
+			{
+				"amount": 4300,
+				"currency": 710,
+				"tax": 700,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"descrition": "Connection fee"
+		},
+
+		{
+			"amount": 
+			{
+				"amount": 4300,
+				"currency": 710,
+				"tax": 700,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"descrition": "Service fee"
+		}
+	]
+}
