@@ -319,7 +319,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
    private static boolean isRetry(String meterId) {
       // TODO: get list from config
       List<String> retryMeterIds = new ArrayList<>();
-      retryMeterIds.add("TS0000000011");
+      retryMeterIds.add("TST011");
 
       return retryMeterIds.contains(meterId);
    }
