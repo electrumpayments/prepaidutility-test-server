@@ -2,7 +2,6 @@ package io.electrum.pputestserver.resources;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
@@ -106,7 +105,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
        * Log incoming message trace
        */
       Utils.logMessageTrace(requestBody);
-      
+
       /*
        * Validate request
        */
@@ -184,7 +183,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
        * Log incoming message trace
        */
       Utils.logMessageTrace(requestBody);
-      
+
       /*
        * Validate request
        */
@@ -197,15 +196,9 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       }
 
       /*
-       * Lookup original request, if not found, create new
+       * Add request if not already present
        */
-      PurchaseRequest originalRequest = MockServerDb.getPurchaseRequest(UUID.fromString(purchaseId));
-      if (originalRequest == null) {
-         if (!MockServerDb.add(requestBody)) {
-            asyncResponse.resume(ErrorDetailFactory.getNotUniqueUuidErrorDetail(UUID.fromString(purchaseId)));
-            return;
-         }
-      }
+      MockServerDb.add(requestBody);
 
       /*
        * Lookup response corresponding to this meter id
@@ -252,7 +245,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
        * Log incoming message trace
        */
       Utils.logMessageTrace(requestBody);
-      
+
       /*
        * Validate request
        */
