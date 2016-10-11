@@ -2,7 +2,7 @@
 FROM java:7
 
 # that's me!
-MAINTAINER Tim Whelan, timwhelan@electrum.co.za
+MAINTAINER Neil neil@electrum.co.za
 
 # we need this because the workdir is modified in dockerfile/java -> now java:8
 WORKDIR /
@@ -13,8 +13,8 @@ USER daemon
 # copy the locally built fat-jar to the image
 ADD ${project.artifactId}-${project.version}-jar-with-dependencies.jar ${project.artifactId}-${project.version}-jar-with-dependencies.jar
 
-# the server binds to 8080 - expose that port
-EXPOSE 	8080
+# the server binds to 9999 - expose that port
+EXPOSE 	9999
 
 # run the server when a container based on this image is being run
-CMD ["java", "-jar", "${project.artifactId}-${project.version}-jar-with-dependencies.jar", "8080" ]
+CMD ["java", "-jar", "${project.artifactId}-${project.version}-jar-with-dependencies.jar", "9999" ]
