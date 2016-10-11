@@ -64,6 +64,9 @@ public class Utils {
       responseBody.setId(requestBody.getId());
       responseBody.setTime(requestBody.getTime());
       responseBody.setOriginator(requestBody.getOriginator());
+      responseBody.setReceiver(requestBody.getReceiver());
+      responseBody.setSettlementEntity(requestBody.getSettlementEntity());
+      responseBody.setClient(requestBody.getClient());
       responseBody.setThirdPartyIdentifiers(requestBody.getThirdPartyIdentifiers());
    }
 
