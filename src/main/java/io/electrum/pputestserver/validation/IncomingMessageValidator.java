@@ -13,6 +13,7 @@ import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.PurchaseRequest;
+import io.electrum.prepaidutility.model.PurchaseRequestRetry;
 import io.electrum.vas.model.BasicReversal;
 import io.electrum.vas.model.Institution;
 import io.electrum.vas.model.LedgerAmount;
@@ -30,7 +31,7 @@ public class IncomingMessageValidator {
 
    public static ValidationResult validate(MeterLookupRequest request) {
       ValidationResult result = new ValidationResult();
-      
+
       if (isEmpty(request)) {
          result.addViolation(new RequestMessageViolation("message", "", "", null));
          return result;
@@ -42,6 +43,19 @@ public class IncomingMessageValidator {
    }
 
    public static ValidationResult validate(PurchaseRequest request) {
+      ValidationResult result = new ValidationResult();
+
+      if (isEmpty(request)) {
+         result.addViolation(new RequestMessageViolation("message", "", "", null));
+         return result;
+      }
+
+      validate(request, result);
+
+      return result;
+   }
+
+   public static ValidationResult validate(PurchaseRequestRetry request) {
       ValidationResult result = new ValidationResult();
 
       if (isEmpty(request)) {
@@ -92,7 +106,7 @@ public class IncomingMessageValidator {
 
       return result;
    }
-   
+
    public static ValidationResult validate(BasicReversal request) {
       ValidationResult result = new ValidationResult();
 
@@ -134,6 +148,13 @@ public class IncomingMessageValidator {
       validate(request.getPurchaseAmount(), "purchaseAmount", result);
    }
 
+   private static void validate(PurchaseRequestRetry request, ValidationResult result) {
+      validateValue(request, "message", "retryId", result);
+      validateValue(request, "message", "retryTime", result);
+
+      validate(request.getOriginalRequest(), result);
+   }
+
    private static void validate(KeyChangeTokenRequest request, ValidationResult result) {
       validateBasicTranFields(request, result);
 
@@ -155,7 +176,7 @@ public class IncomingMessageValidator {
       validateTenders(request.getTenders(), result);
       validate(request.getThirdPartyIdentifiers(), result);
    }
-   
+
    private static void validate(BasicReversal request, ValidationResult result) {
       validateValue(request, "message", "id", result);
       validateValue(request, "message", "requestId", result);

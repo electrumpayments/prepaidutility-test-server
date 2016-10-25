@@ -21,13 +21,14 @@ import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.utils.Utils;
 import io.electrum.prepaidutility.api.ITokenPurchasesResource;
 import io.electrum.prepaidutility.api.TokenPurchasesResource;
+import io.electrum.prepaidutility.model.ConfirmationAdvice;
 import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.PurchaseRequest;
+import io.electrum.prepaidutility.model.PurchaseRequestRetry;
 import io.electrum.prepaidutility.model.PurchaseResponse;
-import io.electrum.vas.model.BasicReversal;
-import io.electrum.vas.model.TenderAdvice;
+import io.electrum.prepaidutility.model.ReversalAdvice;
 
-@Path("/prepaidutility/v1/tokenPurchases")
+@Path("/prepaidutility/v2/tokenPurchases")
 public class TokenPurchasesResourceImpl extends TokenPurchasesResource implements ITokenPurchasesResource {
 
    static TokenPurchasesResourceImpl instance = null;
@@ -45,7 +46,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
    public void confirmTokenPurchase(
          String purchaseId,
          String confirmationId,
-         TenderAdvice requestBody,
+         ConfirmationAdvice requestBody,
          SecurityContext securityContext,
          AsyncResponse asyncResponse,
          Request request,
@@ -172,7 +173,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
    public void retryPurchaseRequest(
          String purchaseId,
          String retryId,
-         PurchaseRequest requestBody,
+         PurchaseRequestRetry requestBody,
          SecurityContext securityContext,
          AsyncResponse asyncResponse,
          Request request,
@@ -190,20 +191,20 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
-      if (!Utils.isUuidConsistent(retryId, requestBody.getId())) {
-         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(retryId, requestBody.getId()));
+      if (!Utils.isUuidConsistent(retryId, requestBody.getRetryId())) {
+         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(retryId, requestBody.getRetryId()));
          return;
       }
 
       /*
-       * Add request if not already present
+       * Add original request if not already present
        */
-      MockServerDb.add(requestBody);
+      MockServerDb.add(requestBody.getOriginalRequest());
 
       /*
        * Lookup response corresponding to this meter id
        */
-      Meter meter = requestBody.getMeter();
+      Meter meter = requestBody.getOriginalRequest().getMeter();
       PurchaseResponse responseBody = MockResponseTemplates.getPurchaseResponse(meter.getMeterId());
 
       /*
@@ -217,7 +218,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       /*
        * Check that request amount matches that specified for test case
        */
-      if (!checkRequestAmount(requestBody, meter.getMeterId())) {
+      if (!checkRequestAmount(requestBody.getOriginalRequest(), meter.getMeterId())) {
          asyncResponse.resume(ErrorDetailFactory.getInvalidRequestAmount());
          return;
       }
@@ -225,7 +226,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       /*
        * Build and send positive response
        */
-      Utils.copyBaseFieldsFromRequest(responseBody, requestBody);
+      Utils.copyBaseFieldsFromRequest(responseBody, requestBody.getOriginalRequest());
       Utils.logMessageTrace(responseBody);
       asyncResponse.resume(Response.status(Response.Status.CREATED).entity(responseBody).build());
    }
@@ -234,7 +235,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
    public void reverseTokenPurchase(
          String purchaseId,
          String reversalId,
-         BasicReversal requestBody,
+         ReversalAdvice requestBody,
          SecurityContext securityContext,
          AsyncResponse asyncResponse,
          Request request,

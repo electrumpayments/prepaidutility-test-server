@@ -19,7 +19,7 @@ import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.FaultReportResponse;
 import io.electrum.prepaidutility.model.Meter;
 
-@Path("/prepaidutility/v1/faultReports")
+@Path("/prepaidutility/v2/faultReports")
 public class FaultReportsResourceImpl extends FaultReportsResource implements IFaultReportsResource {
 
    static FaultReportsResourceImpl instance = null;

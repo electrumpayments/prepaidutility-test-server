@@ -1,60 +1,65 @@
 package io.electrum.pputestserver.backend;
 
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
+import io.electrum.prepaidutility.model.ConfirmationAdvice;
 import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.PurchaseRequest;
+import io.electrum.prepaidutility.model.PurchaseRequestRetry;
+import io.electrum.prepaidutility.model.ReversalAdvice;
 import io.electrum.vas.model.BasicAdvice;
-import io.electrum.vas.model.BasicReversal;
-import io.electrum.vas.model.TenderAdvice;
 import io.electrum.vas.model.Transaction;
 
 /**
  * A mock REST server in-memory database represented by {@link Cache} objects.
  * 
- * Resources are created by caching incoming POST requests by their {@link UUID}. To restrict memory footprint, entries
- * are removed after specified length.
+ * Resources are created by caching incoming POST requests by their UUID (which is stored as a {@link String}). To
+ * restrict memory footprint, entries are removed after specified length.
  * 
  */
 public class MockServerDb {
    private static int expireAfterMinutes = 30;
 
-   private static Cache<UUID, MeterLookupRequest> meterLookups = buildNewCache();
-   private static Cache<UUID, PurchaseRequest> purchaseRequests = buildNewCache();
-   private static Cache<UUID, KeyChangeTokenRequest> kctRequests = buildNewCache();
-   private static Cache<UUID, FaultReportRequest> faultReportRequests = buildNewCache();
+   private static Cache<String, MeterLookupRequest> meterLookups = buildNewCache();
+   private static Cache<String, PurchaseRequest> purchaseRequests = buildNewCache();
+   private static Cache<String, PurchaseRequestRetry> purchaseRequestRetries = buildNewRetryCache();
+   private static Cache<String, KeyChangeTokenRequest> kctRequests = buildNewCache();
+   private static Cache<String, FaultReportRequest> faultReportRequests = buildNewCache();
 
-   private static Cache<UUID, TenderAdvice> confirmationRequests = buildNewAdviceCache();
-   private static Cache<UUID, BasicReversal> reversalRequests = buildNewAdviceCache();
+   private static Cache<String, ConfirmationAdvice> confirmations = buildNewAdviceCache();
+   private static Cache<String, ReversalAdvice> reversals = buildNewAdviceCache();
 
-   public static MeterLookupRequest getMeterLookup(UUID uuid) {
+   public static MeterLookupRequest getMeterLookup(String uuid) {
       return meterLookups.getIfPresent(uuid);
    }
 
-   public static PurchaseRequest getPurchaseRequest(UUID uuid) {
+   public static PurchaseRequest getPurchaseRequest(String uuid) {
       return purchaseRequests.getIfPresent(uuid);
    }
 
-   public static KeyChangeTokenRequest getKctRequest(UUID uuid) {
+   public static PurchaseRequestRetry getPurchaseRequestRetry(String uuid) {
+      return purchaseRequestRetries.getIfPresent(uuid);
+   }
+
+   public static KeyChangeTokenRequest getKctRequest(String uuid) {
       return kctRequests.getIfPresent(uuid);
    }
 
-   public static FaultReportRequest getFaultReportRequest(UUID uuid) {
+   public static FaultReportRequest getFaultReportRequest(String uuid) {
       return faultReportRequests.getIfPresent(uuid);
    }
 
-   public static TenderAdvice getConfirmationRequest(UUID uuid) {
-      return confirmationRequests.getIfPresent(uuid);
+   public static ConfirmationAdvice getConfirmationAdvice(String uuid) {
+      return confirmations.getIfPresent(uuid);
    }
 
-   public static BasicReversal getReversalRequest(UUID uuid) {
-      return reversalRequests.getIfPresent(uuid);
+   public static ReversalAdvice getReversalAdvice(String uuid) {
+      return reversals.getIfPresent(uuid);
    }
 
    public static boolean add(MeterLookupRequest request) {
@@ -75,12 +80,21 @@ public class MockServerDb {
       return true;
    }
 
-   public static boolean add(PurchaseRequest request, UUID originalRequestId) {
+   public static boolean add(PurchaseRequest request, String originalRequestId) {
       if (purchaseRequests.asMap().containsKey(originalRequestId)) {
          return false;
       }
 
       purchaseRequests.put(originalRequestId, request);
+      return true;
+   }
+
+   public static boolean add(PurchaseRequestRetry request) {
+      if (purchaseRequestRetries.asMap().containsKey(request.getRetryId())) {
+         return false;
+      }
+
+      purchaseRequestRetries.put(request.getRetryId(), request);
       return true;
    }
 
@@ -102,29 +116,33 @@ public class MockServerDb {
       return true;
    }
 
-   public static boolean add(TenderAdvice request) {
-      if (confirmationRequests.asMap().containsKey(request.getId())) {
+   public static boolean add(ConfirmationAdvice request) {
+      if (confirmations.asMap().containsKey(request.getId())) {
          return false;
       }
 
-      confirmationRequests.put(request.getId(), request);
+      confirmations.put(request.getId(), request);
       return true;
    }
 
-   public static boolean add(BasicReversal request) {
-      if (reversalRequests.asMap().containsKey(request.getId())) {
+   public static boolean add(ReversalAdvice request) {
+      if (reversals.asMap().containsKey(request.getId())) {
          return false;
       }
 
-      reversalRequests.put(request.getId(), request);
+      reversals.put(request.getId(), request);
       return true;
    }
 
-   private static <T extends Transaction> Cache<UUID, T> buildNewCache() {
+   private static <T extends Transaction> Cache<String, T> buildNewCache() {
       return CacheBuilder.newBuilder().expireAfterWrite(expireAfterMinutes, TimeUnit.MINUTES).build();
    }
 
-   private static <T extends BasicAdvice> Cache<UUID, T> buildNewAdviceCache() {
+   private static Cache<String, PurchaseRequestRetry> buildNewRetryCache() {
+      return CacheBuilder.newBuilder().expireAfterWrite(expireAfterMinutes, TimeUnit.MINUTES).build();
+   }
+
+   private static <T extends BasicAdvice> Cache<String, T> buildNewAdviceCache() {
       return CacheBuilder.newBuilder().expireAfterWrite(expireAfterMinutes, TimeUnit.MINUTES).build();
    }
 }

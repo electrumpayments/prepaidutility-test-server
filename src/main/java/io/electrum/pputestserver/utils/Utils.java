@@ -3,7 +3,6 @@ package io.electrum.pputestserver.utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
-import java.util.UUID;
 
 import javax.ws.rs.container.AsyncResponse;
 
@@ -26,6 +25,7 @@ import io.electrum.prepaidutility.model.FaultReportRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.PurchaseRequest;
+import io.electrum.prepaidutility.model.PurchaseRequestRetry;
 import io.electrum.vas.model.BasicReversal;
 import io.electrum.vas.model.TenderAdvice;
 import io.electrum.vas.model.Transaction;
@@ -79,12 +79,12 @@ public class Utils {
          logger.error("Error processing JSON request message");
       }
    }
-   
-   public static boolean isUuidConsistent(String pathId, UUID bodyUuid) {
+
+   public static boolean isUuidConsistent(String pathId, String bodyUuid) {
       if (pathId == null || bodyUuid == null) {
          return false;
       }
-      return pathId.equals(bodyUuid.toString());
+      return pathId.equals(bodyUuid);
    }
 
    public static boolean validateRequest(MeterLookupRequest requestBody, AsyncResponse asyncResponse) {
@@ -98,6 +98,16 @@ public class Utils {
    }
 
    public static boolean validateRequest(PurchaseRequest requestBody, AsyncResponse asyncResponse) {
+      ValidationResult validation = IncomingMessageValidator.validate(requestBody);
+
+      if (!validation.isValid()) {
+         sendErrorResponse(validation, asyncResponse);
+         return false;
+      }
+      return true;
+   }
+
+   public static boolean validateRequest(PurchaseRequestRetry requestBody, AsyncResponse asyncResponse) {
       ValidationResult validation = IncomingMessageValidator.validate(requestBody);
 
       if (!validation.isValid()) {

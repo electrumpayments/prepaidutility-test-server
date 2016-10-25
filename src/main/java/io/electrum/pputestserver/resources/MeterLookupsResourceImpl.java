@@ -19,7 +19,7 @@ import io.electrum.prepaidutility.model.Meter;
 import io.electrum.prepaidutility.model.MeterLookupRequest;
 import io.electrum.prepaidutility.model.MeterLookupResponse;
 
-@Path("/prepaidutility/v1/meterLookups")
+@Path("/prepaidutility/v2/meterLookups")
 public class MeterLookupsResourceImpl extends MeterLookupsResource implements IMeterLookupsResource {
 
    static MeterLookupsResourceImpl instance = null;

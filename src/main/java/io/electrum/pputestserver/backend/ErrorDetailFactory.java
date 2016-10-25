@@ -1,11 +1,9 @@
 package io.electrum.pputestserver.backend;
 
-import java.util.UUID;
-
 import javax.ws.rs.core.Response;
 
 import io.electrum.pputestserver.validation.ValidationResult;
-import io.electrum.vas.model.ErrorDetail;
+import io.electrum.prepaidutility.model.ErrorDetail;
 
 public class ErrorDetailFactory {
    public static Response getIllFormattedMessageErrorDetail(ValidationResult result) {
@@ -16,7 +14,7 @@ public class ErrorDetailFactory {
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
 
-   public static Response getNotUniqueUuidErrorDetail(UUID id) {
+   public static Response getNotUniqueUuidErrorDetail(String id) {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.DUPLICATE_RECORD);
       errorDetail.setErrorMessage("Message ID (UUID) is not unique.");
@@ -24,17 +22,17 @@ public class ErrorDetailFactory {
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
 
-   public static Response getInconsistentUuidErrorDetail(String pathId, UUID bodyUuid) {
+   public static Response getInconsistentUuidErrorDetail(String pathId, String bodyUuid) {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.FORMAT_ERROR);
       errorDetail.setErrorMessage("Message ID (UUID) is not the same as ID path parameter.");
-      errorDetail.setDetailMessage("Message ID: " + bodyUuid.toString() + "; ID path parameter: " + pathId);
+      errorDetail.setDetailMessage("Message ID: " + bodyUuid + "; ID path parameter: " + pathId);
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
    }
 
    public static Response getUnknownMeterIdErrorDetail(String meterId) {
       ErrorDetail errorDetail = new ErrorDetail();
-      errorDetail.setErrorType(ErrorDetail.ErrorType.UNKNOWN_CUSTOMER_ACCOUNT);
+      errorDetail.setErrorType(ErrorDetail.ErrorType.UNKNOWN_METER_ID);
       errorDetail.setErrorMessage("Unknown meter ID");
       errorDetail.setDetailMessage("This meter ID was not recognised by the system: " + meterId);
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
@@ -64,7 +62,7 @@ public class ErrorDetailFactory {
       return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorDetail).build();
    }
 
-   public static Response getOriginalRequestNotFound(UUID originalReqId) {
+   public static Response getOriginalRequestNotFound(String originalReqId) {
       ErrorDetail errorDetail = new ErrorDetail();
       errorDetail.setErrorType(ErrorDetail.ErrorType.UNABLE_TO_LOCATE_RECORD);
       errorDetail.setErrorMessage("Original request not found");
