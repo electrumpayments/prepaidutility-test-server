@@ -165,7 +165,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -206,7 +206,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
 						"method": "POST",
 						"header": [
 							{
