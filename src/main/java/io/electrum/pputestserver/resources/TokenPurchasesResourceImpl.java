@@ -35,7 +35,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
    private static Logger logger = LoggerFactory.getLogger(TokenPurchasesResourceImpl.class);
 
    @Override
-   protected ITokenPurchasesResource getResourceImplementetion() {
+   protected ITokenPurchasesResource getResourceImplementation() {
       if (instance == null) {
          instance = new TokenPurchasesResourceImpl();
       }
