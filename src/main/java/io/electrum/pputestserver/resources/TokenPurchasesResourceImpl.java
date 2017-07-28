@@ -19,7 +19,7 @@ import io.electrum.prepaidutility.api.ITokenPurchasesResource;
 import io.electrum.prepaidutility.api.TokenPurchasesResource;
 import io.electrum.prepaidutility.model.*;
 
-@Path("/prepaidutility/v2/tokenPurchases")
+@Path("/prepaidutility/v3/tokenPurchases")
 public class TokenPurchasesResourceImpl extends TokenPurchasesResource implements ITokenPurchasesResource {
 
    static TokenPurchasesResourceImpl instance = null;

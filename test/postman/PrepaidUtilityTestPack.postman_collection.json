@@ -99,7 +99,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/faultReports/{{requestId}}",
+						"url": "{{host}}/faultReports/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -215,7 +215,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/keyChangeTokenRequests/{{requestId}}",
+						"url": "{{host}}/keyChangeTokenRequests/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -335,7 +335,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
+						"url": "{{host}}/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -455,7 +455,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -515,7 +515,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -635,7 +635,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
+						"url": "{{host}}/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -755,7 +755,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -814,7 +814,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -934,7 +934,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
+						"url": "{{host}}/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -996,7 +996,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1116,7 +1116,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/retry",
+						"url": "{{host}}/tokenPurchases/{{requestId}}/retry",
 						"method": "POST",
 						"header": [
 							{
@@ -1176,7 +1176,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1294,7 +1294,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
+						"url": "{{host}}/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1361,7 +1361,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
+						"url": "{{host}}/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1427,7 +1427,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -1486,7 +1486,7 @@
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
+						"url": "{{host}}/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
 						"method": "POST",
 						"header": [
 							{
