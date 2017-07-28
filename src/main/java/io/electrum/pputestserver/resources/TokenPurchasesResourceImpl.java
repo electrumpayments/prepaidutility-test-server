@@ -6,11 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.ws.rs.container.AsyncResponse;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Request;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +17,7 @@ import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.utils.Utils;
 import io.electrum.prepaidutility.api.ITokenPurchasesResource;
 import io.electrum.prepaidutility.api.TokenPurchasesResource;
-import io.electrum.prepaidutility.model.ConfirmationAdvice;
-import io.electrum.prepaidutility.model.Meter;
-import io.electrum.prepaidutility.model.PurchaseRequest;
-import io.electrum.prepaidutility.model.PurchaseRequestRetry;
-import io.electrum.prepaidutility.model.PurchaseResponse;
-import io.electrum.prepaidutility.model.ReversalAdvice;
+import io.electrum.prepaidutility.model.*;
 
 @Path("/prepaidutility/v2/tokenPurchases")
 public class TokenPurchasesResourceImpl extends TokenPurchasesResource implements ITokenPurchasesResource {
@@ -172,8 +163,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
    @Override
    public void retryPurchaseRequest(
          String purchaseId,
-         String retryId,
-         PurchaseRequestRetry requestBody,
+         PurchaseRequest requestBody,
          SecurityContext securityContext,
          AsyncResponse asyncResponse,
          Request request,
@@ -191,20 +181,16 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       if (!Utils.validateRequest(requestBody, asyncResponse)) {
          return;
       }
-      if (!Utils.isUuidConsistent(retryId, requestBody.getRetryId())) {
-         asyncResponse.resume(ErrorDetailFactory.getInconsistentUuidErrorDetail(retryId, requestBody.getRetryId()));
-         return;
-      }
 
       /*
        * Add original request if not already present
        */
-      MockServerDb.add(requestBody.getOriginalRequest());
+      MockServerDb.add(requestBody);
 
       /*
        * Lookup response corresponding to this meter id
        */
-      Meter meter = requestBody.getOriginalRequest().getMeter();
+      Meter meter = requestBody.getMeter();
       PurchaseResponse responseBody = MockResponseTemplates.getPurchaseResponse(meter.getMeterId());
 
       /*
@@ -218,7 +204,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       /*
        * Check that request amount matches that specified for test case
        */
-      if (!checkRequestAmount(requestBody.getOriginalRequest(), meter.getMeterId())) {
+      if (!checkRequestAmount(requestBody, meter.getMeterId())) {
          asyncResponse.resume(ErrorDetailFactory.getInvalidRequestAmount());
          return;
       }
@@ -226,7 +212,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
       /*
        * Build and send positive response
        */
-      Utils.copyBaseFieldsFromRequest(responseBody, requestBody.getOriginalRequest());
+      Utils.copyBaseFieldsFromRequest(responseBody, requestBody);
       Utils.logMessageTrace(responseBody);
       asyncResponse.resume(Response.status(Response.Status.CREATED).entity(responseBody).build());
    }

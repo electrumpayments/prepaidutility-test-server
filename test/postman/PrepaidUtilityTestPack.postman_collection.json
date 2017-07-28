@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Prepaid Utility Test Pack",
-		"_postman_id": "e715939a-bcea-98ac-3f05-3702464f4a84",
+		"_postman_id": "f12a629f-4c8e-e6d9-d8e3-f08c1a30e179",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -18,19 +18,88 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\ntests[\"Reference present\"] = jsonData.reference !== null;\ntests[\"Description present\"] = jsonData.description  !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Reference present\"] = jsonData.reference !== null;",
+									"tests[\"Description present\"] = jsonData.description  !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\npostman.setEnvironmentVariable(\"originatorTranRef\",_p8());\npostman.setEnvironmentVariable(\"clientTranRef\",_p8());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"postman.setEnvironmentVariable(\"originatorTranRef\",_p8());",
+									"postman.setEnvironmentVariable(\"clientTranRef\",_p8());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/faultReports/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/faultReports/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -65,19 +134,88 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\ntests[\"Meter present\"] = jsonData.meter !== null;\ntests[\"Tokens present\"] = jsonData.tokens  !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Meter present\"] = jsonData.meter !== null;",
+									"tests[\"Tokens present\"] = jsonData.tokens  !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\npostman.setEnvironmentVariable(\"originatorTranRef\",_p8());\npostman.setEnvironmentVariable(\"clientTranRef\",_p8());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"postman.setEnvironmentVariable(\"originatorTranRef\",_p8());",
+									"postman.setEnvironmentVariable(\"clientTranRef\",_p8());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/keyChangeTokenRequests/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/keyChangeTokenRequests/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -112,19 +250,92 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar meter = jsonData.meter\ntests[\"Meter present\"] = meter !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;\n\npostman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);\n\npostman.setNextRequest(\"2_PurchaseRequest\");"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"var meter = jsonData.meter",
+									"tests[\"Meter present\"] = meter !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;",
+									"",
+									"postman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);",
+									"",
+									"postman.setNextRequest(\"2_PurchaseRequest\");"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\npostman.setEnvironmentVariable(\"originatorTranRef\",_p8());\npostman.setEnvironmentVariable(\"clientTranRef\",_p8());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"postman.setEnvironmentVariable(\"originatorTranRef\",_p8());",
+									"postman.setEnvironmentVariable(\"clientTranRef\",_p8());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/meterLookups/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -153,19 +364,98 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar meter = jsonData.meter\ntests[\"Meter present\"] = meter !== null;\n\ntests[\"Customer present\"] = jsonData.customer !== null;\ntests[\"Utility present\"] = jsonData.utility !== null;\ntests[\"Tokens present\"] = jsonData.tokens !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;\n\npostman.setEnvironmentVariable(\"thirdPartyId1\", jsonData.thirdPartyIdentifiers[0].institutionId);\npostman.setEnvironmentVariable(\"thirdPartyTranRef1\", jsonData.thirdPartyIdentifiers[0].transactionIdentifier);\n\npostman.setEnvironmentVariable(\"thirdPartyId2\", jsonData.thirdPartyIdentifiers[1].institutionId);\npostman.setEnvironmentVariable(\"thirdPartyTranRef2\", jsonData.thirdPartyIdentifiers[1].transactionIdentifier);\n\npostman.setNextRequest(\"3_ConfirmationAdvice\");"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"var meter = jsonData.meter",
+									"tests[\"Meter present\"] = meter !== null;",
+									"",
+									"tests[\"Customer present\"] = jsonData.customer !== null;",
+									"tests[\"Utility present\"] = jsonData.utility !== null;",
+									"tests[\"Tokens present\"] = jsonData.tokens !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;",
+									"",
+									"postman.setEnvironmentVariable(\"thirdPartyId1\", jsonData.thirdPartyIdentifiers[0].institutionId);",
+									"postman.setEnvironmentVariable(\"thirdPartyTranRef1\", jsonData.thirdPartyIdentifiers[0].transactionIdentifier);",
+									"",
+									"postman.setEnvironmentVariable(\"thirdPartyId2\", jsonData.thirdPartyIdentifiers[1].institutionId);",
+									"postman.setEnvironmentVariable(\"thirdPartyTranRef2\", jsonData.thirdPartyIdentifiers[1].transactionIdentifier);",
+									"",
+									"postman.setNextRequest(\"3_ConfirmationAdvice\");"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -194,19 +484,38 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 202\"] = responseCode.code === 202;"
+								"exec": [
+									"tests[\"Status code is 202\"] = responseCode.code === 202;"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"adviceDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"confirmationId\",uuid());\npostman.setEnvironmentVariable(\"tenderAmount\",environment.requestAmount);\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"adviceDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"confirmationId\",uuid());",
+									"postman.setEnvironmentVariable(\"tenderAmount\",environment.requestAmount);",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -241,19 +550,92 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar meter = jsonData.meter\ntests[\"Meter present\"] = meter !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;\n\npostman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);\n\npostman.setNextRequest(\"2_PurchaseRequest\");"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"var meter = jsonData.meter",
+									"tests[\"Meter present\"] = meter !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;",
+									"",
+									"postman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);",
+									"",
+									"postman.setNextRequest(\"2_PurchaseRequest\");"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\npostman.setEnvironmentVariable(\"originatorTranRef\",_p8());\npostman.setEnvironmentVariable(\"clientTranRef\",_p8());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"postman.setEnvironmentVariable(\"originatorTranRef\",_p8());",
+									"postman.setEnvironmentVariable(\"clientTranRef\",_p8());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/meterLookups/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -282,19 +664,98 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar meter = jsonData.meter\ntests[\"Meter present\"] = meter !== null;\n\ntests[\"Customer present\"] = jsonData.customer !== null;\ntests[\"Utility present\"] = jsonData.utility !== null;\ntests[\"Tokens present\"] = jsonData.tokens !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;\n\npostman.setEnvironmentVariable(\"thirdPartyId1\", jsonData.thirdPartyIdentifiers[0].institutionId);\npostman.setEnvironmentVariable(\"thirdPartyTranRef1\", jsonData.thirdPartyIdentifiers[0].transactionIdentifier);\n\npostman.setEnvironmentVariable(\"thirdPartyId2\", jsonData.thirdPartyIdentifiers[1].institutionId);\npostman.setEnvironmentVariable(\"thirdPartyTranRef2\", jsonData.thirdPartyIdentifiers[1].transactionIdentifier);\n\npostman.setNextRequest(\"3_ReversalAdvice\");"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"var meter = jsonData.meter",
+									"tests[\"Meter present\"] = meter !== null;",
+									"",
+									"tests[\"Customer present\"] = jsonData.customer !== null;",
+									"tests[\"Utility present\"] = jsonData.utility !== null;",
+									"tests[\"Tokens present\"] = jsonData.tokens !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;",
+									"",
+									"postman.setEnvironmentVariable(\"thirdPartyId1\", jsonData.thirdPartyIdentifiers[0].institutionId);",
+									"postman.setEnvironmentVariable(\"thirdPartyTranRef1\", jsonData.thirdPartyIdentifiers[0].transactionIdentifier);",
+									"",
+									"postman.setEnvironmentVariable(\"thirdPartyId2\", jsonData.thirdPartyIdentifiers[1].institutionId);",
+									"postman.setEnvironmentVariable(\"thirdPartyTranRef2\", jsonData.thirdPartyIdentifiers[1].transactionIdentifier);",
+									"",
+									"postman.setNextRequest(\"3_ReversalAdvice\");"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -323,19 +784,37 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 202\"] = responseCode.code === 202;"
+								"exec": [
+									"tests[\"Status code is 202\"] = responseCode.code === 202;"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"adviceDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"reversalId\",uuid());\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"adviceDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"reversalId\",uuid());",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -370,19 +849,92 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar meter = jsonData.meter\ntests[\"Meter present\"] = meter !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;\n\npostman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);\n\npostman.setNextRequest(\"2_PurchaseRequest\");"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"var meter = jsonData.meter",
+									"tests[\"Meter present\"] = meter !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;",
+									"",
+									"postman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);",
+									"",
+									"postman.setNextRequest(\"2_PurchaseRequest\");"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\npostman.setEnvironmentVariable(\"originatorTranRef\",_p8());\npostman.setEnvironmentVariable(\"clientTranRef\",_p8());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"postman.setEnvironmentVariable(\"originatorTranRef\",_p8());",
+									"postman.setEnvironmentVariable(\"clientTranRef\",_p8());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/meterLookups/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -411,19 +963,40 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 504\"] = responseCode.code === 504;\n\npostman.setNextRequest(\"3_RetryRequest\");"
+								"exec": [
+									"tests[\"Status code is 504\"] = responseCode.code === 504;",
+									"",
+									"postman.setNextRequest(\"3_RetryRequest\");"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -452,19 +1025,98 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar meter = jsonData.meter\ntests[\"Meter present\"] = meter !== null;\n\ntests[\"Customer present\"] = jsonData.customer !== null;\ntests[\"Utility present\"] = jsonData.utility !== null;\ntests[\"Tokens present\"] = jsonData.tokens !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.retryId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;\n\npostman.setEnvironmentVariable(\"thirdPartyId1\", jsonData.thirdPartyIdentifiers[0].institutionId);\npostman.setEnvironmentVariable(\"thirdPartyTranRef1\", jsonData.thirdPartyIdentifiers[0].transactionIdentifier);\n\npostman.setEnvironmentVariable(\"thirdPartyId2\", jsonData.thirdPartyIdentifiers[1].institutionId);\npostman.setEnvironmentVariable(\"thirdPartyTranRef2\", jsonData.thirdPartyIdentifiers[1].transactionIdentifier);\n\npostman.setNextRequest(\"4_ConfirmationAdvice\");"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"var meter = jsonData.meter",
+									"tests[\"Meter present\"] = meter !== null;",
+									"",
+									"tests[\"Customer present\"] = jsonData.customer !== null;",
+									"tests[\"Utility present\"] = jsonData.utility !== null;",
+									"tests[\"Tokens present\"] = jsonData.tokens !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.retryId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;",
+									"",
+									"postman.setEnvironmentVariable(\"thirdPartyId1\", jsonData.thirdPartyIdentifiers[0].institutionId);",
+									"postman.setEnvironmentVariable(\"thirdPartyTranRef1\", jsonData.thirdPartyIdentifiers[0].transactionIdentifier);",
+									"",
+									"postman.setEnvironmentVariable(\"thirdPartyId2\", jsonData.thirdPartyIdentifiers[1].institutionId);",
+									"postman.setEnvironmentVariable(\"thirdPartyTranRef2\", jsonData.thirdPartyIdentifiers[1].transactionIdentifier);",
+									"",
+									"postman.setNextRequest(\"4_ConfirmationAdvice\");"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"retryId\",uuid());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"retryDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"retryId\",uuid());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}/retries/{{retryId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/retry",
 						"method": "POST",
 						"header": [
 							{
@@ -480,7 +1132,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"purchaseAmount\": {\n\t\t\"amount\": \"{{requestAmount}}\",\n\t\t\"currency\": \"{{currency}}\"\n\t},\n    \"meter\": {\n    \t\"meterId\": \"{{timeoutMeterId}}\"\n    },\n    \"client\": {\n        \"id\": \"{{clientId}}\",\n        \"name\": \"{{clientName}}\"\n    },\n    \"id\": \"{{retryId}}\",\n    \"originator\": {\n        \"institution\": {\n            \"id\": \"{{originatorInstId}}\",\n            \"name\": \"{{originatorInstName}}\"\n        },\n        \"merchant\": {\n            \"merchantId\": \"{{merchantId}}\",\n            \"merchantName\": {\n                \"city\": \"{{merchantCity}}\",\n                \"country\": \"{{merchantCountry}}\",\n                \"name\": \"{{merchantName}}\",\n                \"region\": \"{{merchantRegion}}\"\n            },\n            \"merchantType\": \"{{merchantType}}\"\n        },\n        \"terminalId\": \"{{terminalId}}\"\n    },\n    \"receiver\": {\n        \"id\": \"{{receiverId}}\",\n        \"name\": \"{{receiverName}}\"\n    },\n    \"settlementEntity\": {\n        \"id\": \"{{settlementEntityId}}\",\n        \"name\": \"{{settlementEntityName}}\"\n    },\n    \"thirdPartyIdentifiers\": [\n        {\n            \"institutionId\": \"{{originatorInstId}}\",\n            \"transactionIdentifier\": \"{{originatorTranRef}}\"\n        },\n        {\n            \"institutionId\": \"{{clientId}}\",\n            \"transactionIdentifier\": \"{{clientTranRef}}\"\n        }\n    ],\n    \"time\": \"{{reqDateTime}}\"\n}"
+							"raw": "{\n    \"purchaseAmount\": {\n      \"amount\": \"{{requestAmount}}\",\n      \"currency\": \"{{currency}}\"\n    },\n    \"meter\": {\n      \"meterId\": \"{{timeoutMeterId}}\"\n    },\n    \"client\": {\n      \"id\": \"{{clientId}}\",\n      \"name\": \"{{clientName}}\"\n    },\n    \"id\": \"{{retryId}}\",\n    \"originator\": {\n      \"institution\": {\n        \"id\": \"{{originatorInstId}}\",\n        \"name\": \"{{originatorInstName}}\"\n      },\n      \"merchant\": {\n        \"merchantId\": \"{{merchantId}}\",\n        \"merchantName\": {\n          \"city\": \"{{merchantCity}}\",\n          \"country\": \"{{merchantCountry}}\",\n          \"name\": \"{{merchantName}}\",\n          \"region\": \"{{merchantRegion}}\"\n        },\n        \"merchantType\": \"{{merchantType}}\"\n      },\n      \"terminalId\": \"{{terminalId}}\"\n    },\n    \"receiver\": {\n      \"id\": \"{{receiverId}}\",\n      \"name\": \"{{receiverName}}\"\n    },\n    \"settlementEntity\": {\n      \"id\": \"{{settlementEntityId}}\",\n      \"name\": \"{{settlementEntityName}}\"\n    },\n    \"thirdPartyIdentifiers\": [\n      {\n        \"institutionId\": \"{{originatorInstId}}\",\n        \"transactionIdentifier\": \"{{originatorTranRef}}\"\n      },\n      {\n        \"institutionId\": \"{{clientId}}\",\n        \"transactionIdentifier\": \"{{clientTranRef}}\"\n      }\n    ],\n    \"time\": \"{{reqDateTime}}\"\n}"
 						},
 						"description": ""
 					},
@@ -493,19 +1145,38 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 202\"] = responseCode.code === 202;"
+								"exec": [
+									"tests[\"Status code is 202\"] = responseCode.code === 202;"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"adviceDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"confirmationId\",uuid());\npostman.setEnvironmentVariable(\"tenderAmount\",environment.requestAmount);\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"adviceDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"confirmationId\",uuid());",
+									"postman.setEnvironmentVariable(\"tenderAmount\",environment.requestAmount);",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -540,19 +1211,90 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 201\"] = responseCode.code === 201;\n\nvar jsonData = JSON.parse(responseBody);\n\nvar meter = jsonData.meter\ntests[\"Meter present\"] = meter !== null;\n\ntests[\"Correct id returned\"] = jsonData.id === environment.requestId;\ntests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;\n\nvar originator = jsonData.originator;\ntests[\"Originator present\"] = originator !== null;\ntests[\"Originator Merchant present\"] = originator.merchant !== null;\ntests[\"Originator Institution present\"] = originator.institution !== null;\ntests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;\n\nvar merchant = originator.merchant;\ntests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;\ntests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;\ntests[\"Merchant name present\"] = merchant.merchantName !== null;\n\nvar merchantName = merchant.merchantName;\ntests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;\ntests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;\ntests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;\ntests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;\n\nvar originatorInst = originator.institution;\ntests[\"Originator institution present\"] = originatorInst !== null;\ntests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;\ntests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;\n\nvar client = jsonData.client;\ntests[\"Client institution present\"] = client !== null;\ntests[\"Client institution ID present\"] = client.id !== null;\ntests[\"Client institution name present\"] = client.name !== null;\n\nvar settlementEntity = jsonData.settlementEntity;\ntests[\"Settlement Entity institution present\"] = settlementEntity !== null;\ntests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;\ntests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;\n\nvar receiver = jsonData.receiver;\ntests[\"Receiver institution present\"] = receiver !== null;\ntests[\"Receiver institution ID present\"] = receiver.id !== null;\ntests[\"Receiver institution name present\"] = receiver.name !== null;\n\nvar thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;\ntests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;\n\npostman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);"
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"var meter = jsonData.meter",
+									"tests[\"Meter present\"] = meter !== null;",
+									"",
+									"tests[\"Correct id returned\"] = jsonData.id === environment.requestId;",
+									"tests[\"Correct time returned\"] = jsonData.time === environment.reqDateTime;",
+									"",
+									"var originator = jsonData.originator;",
+									"tests[\"Originator present\"] = originator !== null;",
+									"tests[\"Originator Merchant present\"] = originator.merchant !== null;",
+									"tests[\"Originator Institution present\"] = originator.institution !== null;",
+									"tests[\"Originator terminal echoed\"] = originator.terminalId === environment.terminalId;",
+									"",
+									"var merchant = originator.merchant;",
+									"tests[\"Merchant ID echoed\"] = merchant.merchantId === environment.merchantId;",
+									"tests[\"Merchant type echoed\"] = merchant.merchantType === environment.merchantType;",
+									"tests[\"Merchant name present\"] = merchant.merchantName !== null;",
+									"",
+									"var merchantName = merchant.merchantName;",
+									"tests[\"Merchant Name echoed\"] = merchantName.name === environment.merchantName;",
+									"tests[\"Merchant City echoed\"] = merchantName.city === environment.merchantCity;",
+									"tests[\"Merchant Region echoed\"] = merchantName.region === environment.merchantRegion;",
+									"tests[\"Merchant Country echoed\"] = merchantName.country === environment.merchantCountry;",
+									"",
+									"var originatorInst = originator.institution;",
+									"tests[\"Originator institution present\"] = originatorInst !== null;",
+									"tests[\"Originator institution ID echoed\"] = originatorInst.id === environment.originatorInstId;",
+									"tests[\"Originator institution name echoed\"] = originatorInst.name === environment.originatorInstName;",
+									"",
+									"var client = jsonData.client;",
+									"tests[\"Client institution present\"] = client !== null;",
+									"tests[\"Client institution ID present\"] = client.id !== null;",
+									"tests[\"Client institution name present\"] = client.name !== null;",
+									"",
+									"var settlementEntity = jsonData.settlementEntity;",
+									"tests[\"Settlement Entity institution present\"] = settlementEntity !== null;",
+									"tests[\"Settlement Entity institution ID present\"] = settlementEntity.id !== null;",
+									"tests[\"Settlement Entity institution name present\"] = settlementEntity.name !== null;",
+									"",
+									"var receiver = jsonData.receiver;",
+									"tests[\"Receiver institution present\"] = receiver !== null;",
+									"tests[\"Receiver institution ID present\"] = receiver.id !== null;",
+									"tests[\"Receiver institution name present\"] = receiver.name !== null;",
+									"",
+									"var thirdPartyIndentifiers = jsonData.thirdPartyIndentifiers;",
+									"tests[\"Third Party Indentifiers present\"] = thirdPartyIndentifiers !== null;",
+									"",
+									"postman.setEnvironmentVariable(\"requestAmount\", jsonData.minAmount.amount);"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\npostman.setEnvironmentVariable(\"originatorTranRef\",_p8());\npostman.setEnvironmentVariable(\"clientTranRef\",_p8());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"postman.setEnvironmentVariable(\"originatorTranRef\",_p8());",
+									"postman.setEnvironmentVariable(\"clientTranRef\",_p8());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/meterLookups/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -581,19 +1323,45 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 400\"] = responseCode.code === 400;\n\nvar jsonData = JSON.parse(responseBody);\n\ntests[\"Correct error type returned\"] = jsonData.errorType === \"UNKNOWN_CUSTOMER_ACCOUNT\";\n"
+								"exec": [
+									"tests[\"Status code is 400\"] = responseCode.code === 400;",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Correct error type returned\"] = jsonData.errorType === \"UNKNOWN_METER_ID\";",
+									""
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"reqDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"requestId\",uuid());\npostman.setEnvironmentVariable(\"originatorTranRef\",_p8());\npostman.setEnvironmentVariable(\"clientTranRef\",_p8());\n\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"reqDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"requestId\",uuid());",
+									"postman.setEnvironmentVariable(\"originatorTranRef\",_p8());",
+									"postman.setEnvironmentVariable(\"clientTranRef\",_p8());",
+									"",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/meterLookups/{{requestId}}",
+						"url": "{{host}}/prepaidutility/v2/meterLookups/{{requestId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -628,19 +1396,38 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 404\"] = responseCode.code === 404;"
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"adviceDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"confirmationId\",uuid());\npostman.setEnvironmentVariable(\"tenderAmount\",environment.requestAmount);\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"adviceDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"confirmationId\",uuid());",
+									"postman.setEnvironmentVariable(\"tenderAmount\",environment.requestAmount);",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/confirmations/{{confirmationId}}",
 						"method": "POST",
 						"header": [
 							{
@@ -669,19 +1456,37 @@
 							"listen": "test",
 							"script": {
 								"type": "text/javascript",
-								"exec": "tests[\"Status code is 404\"] = responseCode.code === 404;"
+								"exec": [
+									"tests[\"Status code is 404\"] = responseCode.code === 404;"
+								]
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"type": "text/javascript",
-								"exec": "function _p8(s) {\n        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);\n        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;\n    }\n\nfunction uuid() {\n    \n    return _p8() + _p8(true) + _p8(true) + _p8();\n}\n\nvar dateTime = new Date().toISOString();\npostman.setEnvironmentVariable(\"adviceDateTime\", dateTime);\n\npostman.setEnvironmentVariable(\"reversalId\",uuid());\n"
+								"exec": [
+									"function _p8(s) {",
+									"        var p = (Math.random().toString(16)+\"000000000\").substr(2,8);",
+									"        return s ? \"-\" + p.substr(0,4) + \"-\" + p.substr(4,4) : p ;",
+									"    }",
+									"",
+									"function uuid() {",
+									"    ",
+									"    return _p8() + _p8(true) + _p8(true) + _p8();",
+									"}",
+									"",
+									"var dateTime = new Date().toISOString();",
+									"postman.setEnvironmentVariable(\"adviceDateTime\", dateTime);",
+									"",
+									"postman.setEnvironmentVariable(\"reversalId\",uuid());",
+									""
+								]
 							}
 						}
 					],
 					"request": {
-						"url": "{{host}}/prepaidutility/v1/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
+						"url": "{{host}}/prepaidutility/v2/tokenPurchases/{{requestId}}/reversals/{{reversalId}}",
 						"method": "POST",
 						"header": [
 							{
