@@ -6,6 +6,9 @@
   <artifactId>prepaidutility-test-server</artifactId>
   <version>3.1.0</version>
   <packaging>jar</packaging>
+  <name>Prepaid Utility Test Server</name>
+  <description>Server and Postman scripts to test Prepaid Utility Service Interface implementations</description>
+  <url>https://electrumpayments.github.io/prepaidutility-service-interface-docs/specification/test-resources/</url>
   <licenses>
     <license>
       <name>Apache License, Version 2.0</name>
@@ -29,10 +32,9 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-    <jetty-version>9.2.18.v20160721</jetty-version>
-    <jersey-version>2.22.1</jersey-version>
+    <prepaidutility-version>3.3.0</prepaidutility-version>
+    <jetty-version>9.4.14.v20181114</jetty-version>
+    <jersey-version>2.25</jersey-version>
     <joda-time-version>2.9.4</joda-time-version>
   </properties>
 
@@ -42,7 +44,7 @@
     <dependency>
       <groupId>io.electrum</groupId>
       <artifactId>prepaidutility-service-interface</artifactId>
-      <version>3.3.0</version>
+      <version>${prepaidutility-version}</version>
     </dependency>
 
     <!-- CSV -->
@@ -75,14 +77,12 @@
     <groupId>org.eclipse.jetty</groupId>
     <artifactId>jetty-servlet</artifactId>
     <version>${jetty-version}</version>
-  </dependency>
+    </dependency>
     <dependency>
       <groupId>org.eclipse.jetty</groupId>
       <artifactId>jetty-webapp</artifactId>
       <version>${jetty-version}</version>
     </dependency>
-
-
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>
       <artifactId>jersey-server</artifactId>
@@ -138,9 +138,6 @@
         <directory>src/dist</directory>
         <filtering>true</filtering>
       </resource>
-      <resource>
-        <directory>src/docs/devguide</directory>
-      </resource>
 
     </resources>
 
@@ -153,7 +150,7 @@
 
           <execution>
             <id>copy-resource-docker</id>
-            <phase>install</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -172,7 +169,7 @@
           </execution>
           <execution>
             <id>copy-resource-heroku</id>
-            <phase>install</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -224,8 +221,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
 
@@ -257,29 +254,7 @@
          </executions>
       </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>install</phase>
-            <configuration>
-              <tasks if="newman.test">
-                <exec executable="${basedir}/test/postman/run_tests.sh" failonerror="true">
-                  <arg value="${basedir}"/>
-                  <arg value="${basedir}/test/postman"/>
-                </exec>
-              </tasks>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
     </plugins>
   </build>
-
 
 </project>
