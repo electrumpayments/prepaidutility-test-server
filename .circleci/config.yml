@@ -1,0 +1,147 @@
+version: 2
+jobs:
+  build-and-test:
+    docker:
+      - image: 813968012009.dkr.ecr.us-east-1.amazonaws.com/circleci-openjdk8-8u162
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    # The below is required because of https://discuss.circleci.com/t/circle-working-directory-doesnt-expand/17007
+    working_directory: /home/circleci/project
+    steps:
+      - checkout
+      - restore_cache:
+          # if you ever need to invalidate the cache, simply bump the version number
+          keys:
+            - v1-maven-{{ .Branch }}-{{ checksum "pom.xml" }}
+            - v1-maven-{{ .Branch }}
+      - run: mvn dependency:resolve-plugins dependency:go-offline -B -Dstyle.color=always
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-maven-{{ .Branch }}-{{ checksum "pom.xml" }}
+      - setup_remote_docker
+      - run:
+          name: Compile and package
+          command: mvn package -B -Dstyle.color=always
+      - run:
+          name: Build test server image and start an instance up
+          command: |
+            docker build -t $CIRCLE_PROJECT_REPONAME ./target
+            docker run -d -p 8080:8080 --name test-server $CIRCLE_PROJECT_REPONAME
+      - run:
+          name: Create dummy container with volume containing postman files
+          command: |
+            docker create -v /etc/newman --name collections alpine:3.8 /bin/true
+            docker cp $CIRCLE_WORKING_DIRECTORY/test/postman/. collections:/etc/newman
+      - run:
+          name: Run tests
+          environment:
+            COLLECTION: PrepaidUtilityTestPack
+          command: |
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 10 --folder Lookup-purchase-confirm
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 1 --folder Lookup-purchase-reverse
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-retries.csv -n 1 --folder Lookup-timeout-retry-confirm
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-keychange.csv -n 1 --folder "Key change"
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-keychange.csv -n 1 --folder "Fault reports"
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-keychange.csv -n 1 --folder "Meter lookups"
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -n 1 --folder "Unmatched advices"
+      - run:
+          name: Save docker image for persisting
+          command: |
+            mkdir -p workspace
+            docker save -o workspace/test-server-image.tar $CIRCLE_PROJECT_REPONAME
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - test-server-image.tar
+  deploy:
+    docker:
+      - image: circleci/openjdk:8u162-jdk-stretch
+    environment:
+      HEROKU_APP: ppu-test-server
+      DOCKER_REPONAME: electrum/prepaidutility-test-server
+    steps:
+      - checkout
+      - run:
+          name: Setup Heroku
+          command: |
+            echo 'machine git.heroku.com
+              login $HEROKU_LOGIN
+              password $HEROKU_API_KEY' > ~/.netrc
+            echo 'VerifyHostKeyDNS yes
+                  StrictHostKeyChecking no' > ~/.ssh/config
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push git@heroku.com:$HEROKU_APP.git master
+      - attach_workspace:
+          at: workspace
+      - run:
+          name: Export service interface version
+          command: |
+            echo "export TAG=$(mvn -q -Dexec.executable=echo -Dexec.args='${prepaidutility-version}' --non-recursive exec:exec | cut -c1)" >> $BASH_ENV
+      - setup_remote_docker
+      - run:
+          name: Deploy image to Docker Hub
+          command: |
+            docker load < workspace/test-server-image.tar
+            # tag with major version of underlying service interface
+            docker tag $CIRCLE_PROJECT_REPONAME $DOCKER_REPONAME:$TAG
+            echo $DOCKERHUB_PWD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            docker push $DOCKER_REPONAME:$TAG
+  build-with-latest-deps:
+    docker:
+      - image: 813968012009.dkr.ecr.us-east-1.amazonaws.com/circleci-openjdk8-8u162
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    working_directory: /home/circleci/project
+    steps:
+      - checkout
+      - restore_cache:
+          # if you ever need to invalidate the cache, simply bump the version number
+          keys:
+            - v1-maven-{{ .Branch }}-{{ checksum "pom.xml" }}
+            - v1-maven-{{ .Branch }}
+      - run:
+          name: Update pom with latest Electrum deps
+          command: /electrum/bin/updatePomWithLatestDeps.sh
+      - setup_remote_docker
+      - run:
+          name: Test, but only if any Electrum dependencies changed
+          command: /electrum/bin/postmanTestWithUpdatedDepsJava.sh PrepaidUtilityTestPack
+      - run:
+          name: Notify success to slack
+          command: /electrum/bin/notifySlackDepBuildSucceeded.sh
+          when: on_success
+      - run:
+          name: Notify failure to slack
+          command: /electrum/bin/notifySlackDepBuildFailed.sh
+          when: on_fail
+
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build-and-test:
+          context: java
+      - deploy:
+          context: java
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: master
+  nightly:
+    jobs:
+      - build-with-latest-deps:
+          context: java
+    triggers:
+      - schedule:
+          # every night at 00:00 SAST (22:00 UTC)
+          cron: "00 22 * * *"
+          filters:
+            branches:
+              only:
+                - master
