@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.electrum</groupId>
   <artifactId>prepaidutility-test-server</artifactId>
-  <version>3.1.1</version>
+  <version>3.2.0</version>
   <packaging>jar</packaging>
   <name>Prepaid Utility Test Server</name>
   <description>Server and Postman scripts to test Prepaid Utility Service Interface implementations</description>
@@ -32,7 +32,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <prepaidutility-version>3.3.0</prepaidutility-version>
+    <prepaidutility-version>3.5.2</prepaidutility-version>
+    <service-interface-base-version>3.12.1</service-interface-base-version>
     <jetty-version>9.4.14.v20181114</jetty-version>
     <jersey-version>2.25</jersey-version>
     <joda-time-version>2.9.4</joda-time-version>
@@ -45,6 +46,11 @@
       <groupId>io.electrum</groupId>
       <artifactId>prepaidutility-service-interface</artifactId>
       <version>${prepaidutility-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.electrum</groupId>
+      <artifactId>service-interface-base</artifactId>
+      <version>${service-interface-base-version}</version>
     </dependency>
 
     <!-- CSV -->
