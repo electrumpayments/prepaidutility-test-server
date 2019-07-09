@@ -1,5 +1,5 @@
 # the base image is a trusted ubuntu build with java 8 (https://index.docker.io/u/dockerfile/java/)
-FROM openjdk:8u212-jdk
+FROM java:8
 
 # that's me!
 LABEL maintainer="Electrum Payments, hello@electrum.co.za"
