@@ -27,25 +27,25 @@ jobs:
       - run:
           name: Build test server image and start an instance up
           command: |
-            docker build -t $CIRCLE_PROJECT_REPONAME ./target
-            docker run -d -p 8080:8080 --name test-server $CIRCLE_PROJECT_REPONAME
+            docker -D build -t $CIRCLE_PROJECT_REPONAME ./target
+            docker -D run -d -p 8080:8080 --name test-server $CIRCLE_PROJECT_REPONAME
       - run:
           name: Create dummy container with volume containing postman files
           command: |
-            docker create -v /etc/newman --name collections postman/newman:alpine /bin/true
-            docker cp $CIRCLE_WORKING_DIRECTORY/test/postman/. collections:/etc/newman
+            docker -D create -v /etc/newman --name collections postman/newman:alpine /bin/true
+            docker -D cp $CIRCLE_WORKING_DIRECTORY/test/postman/. collections:/etc/newman
       - run:
           name: Run tests
           environment:
             COLLECTION: PrepaidUtilityTestPack
           command: |
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 10 --folder Lookup-purchase-confirm
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder Lookup-purchase-reverse
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder Lookup-timeout-retry-confirm
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Key change requests"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Fault reports"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Meter lookups"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Unmatched advices"
+            docker -D run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 10 --folder Lookup-purchase-confirm
+            docker -D run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-purchase-reverse
+            docker -D run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-timeout-retry-confirm
+            docker -D run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Key change requests"
+            docker -D run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Fault reports"
+            docker -D run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Meter lookups"
+            docker -D run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Unmatched advices"
       - run:
           name: Save docker image for persisting
           command: |
