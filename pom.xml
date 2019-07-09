@@ -58,6 +58,11 @@
       <artifactId>service-interface-base</artifactId>
       <version>${service-interface-base-version}</version>
     </dependency>
+    <dependency>
+      <groupId>io.electrum</groupId>
+      <artifactId>service-interface-base</artifactId>
+      <version>${service-interface-base-version}</version>
+    </dependency>
 
     <!-- CSV -->
     <dependency>
