@@ -39,13 +39,13 @@ jobs:
           environment:
             COLLECTION: PrepaidUtilityTestPack
           command: |
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 10 --folder Lookup-purchase-confirm
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-purchase-reverse
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-timeout-retry-confirm
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Key change requests"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Fault reports"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Meter lookups"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Unmatched advices"
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 10 --folder Lookup-purchase-confirm
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder Lookup-purchase-reverse
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder Lookup-timeout-retry-confirm
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Key change requests"
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Fault reports"
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Meter lookups"
+            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json --retry 10 --retry-connrefused http://localhost:8080 -e PPUlocalhosttest.postman_environment.json --folder "Unmatched advices"
       - run:
           name: Save docker image for persisting
           command: |
