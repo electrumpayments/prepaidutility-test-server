@@ -28,12 +28,15 @@ jobs:
           name: Build test server image and start an instance up
           command: |
             docker build -t $CIRCLE_PROJECT_REPONAME ./target
-            docker run -d -p 8080:8080 --name test-server $CIRCLE_PROJECT_REPONAME
+            docker run -a -d -p 8080:8080 --name test-server $CIRCLE_PROJECT_REPONAME
+            docker ps -a
       - run:
           name: Create dummy container with volume containing postman files
           command: |
+            docker ps -a
             docker create -v /etc/newman --name collections alpine:3.8 /bin/true
             docker cp $CIRCLE_WORKING_DIRECTORY/test/postman/. collections:/etc/newman
+            docker ps -a
       - run:
           name: Run tests
           environment:
