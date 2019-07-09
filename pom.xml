@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.electrum</groupId>
   <artifactId>prepaidutility-test-server</artifactId>
-  <version>3.2.0</version>
+  <version>3.2.1</version>
   <packaging>jar</packaging>
   <name>Prepaid Utility Test Server</name>
   <description>Server and Postman scripts to test Prepaid Utility Service Interface implementations</description>
@@ -46,6 +46,17 @@
       <groupId>io.electrum</groupId>
       <artifactId>prepaidutility-service-interface</artifactId>
       <version>${prepaidutility-version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.electrum</groupId>
+      <artifactId>service-interface-base</artifactId>
+      <version>${service-interface-base-version}</version>
     </dependency>
     <dependency>
       <groupId>io.electrum</groupId>
@@ -113,6 +124,12 @@
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-json-jackson</artifactId>
       <version>${jersey-version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
 

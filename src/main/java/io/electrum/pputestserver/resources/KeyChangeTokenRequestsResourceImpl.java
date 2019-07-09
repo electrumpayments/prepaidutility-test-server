@@ -21,7 +21,7 @@ import io.electrum.prepaidutility.model.KeyChangeTokenRequest;
 import io.electrum.prepaidutility.model.KeyChangeTokenResponse;
 import io.electrum.prepaidutility.model.Meter;
 
-@Path("/prepaidutility/v3/keyChangeTokenRequests")
+@Path("/prepaidutility/v3")
 public class KeyChangeTokenRequestsResourceImpl extends KeyChangeTokenRequestsResource
       implements IKeyChangeTokenRequestsResource {
 
