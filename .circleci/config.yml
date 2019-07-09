@@ -34,8 +34,8 @@ jobs:
           name: Create dummy container with volume containing postman files
           command: |
             docker ps -a
-            docker create -v /etc/newman --name collections alpine:3.8 /bin/true
-            docker cp $CIRCLE_WORKING_DIRECTORY/test/postman/. collections:/etc/newman
+            #docker create -v /etc/newman --name collections alpine:3.8 /bin/true
+            #docker cp $CIRCLE_WORKING_DIRECTORY/test/postman/. collections:/etc/newman
             docker ps -a
       - run:
           name: Run tests
@@ -43,13 +43,13 @@ jobs:
             COLLECTION: PrepaidUtilityTestPack
           command: |
             docker ps -a
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 10 --folder Lookup-purchase-confirm
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-purchase-reverse
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-timeout-retry-confirm
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Key change requests"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Fault reports"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Meter lookups"
-            docker run --volumes-from collections --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Unmatched advices"
+            docker run -v $CIRCLE_WORKING_DIRECTORY/test/postman:/etc/newman --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json -d test_meterIds-purchases.csv -n 10 --folder Lookup-purchase-confirm
+            docker run -v $CIRCLE_WORKING_DIRECTORY/test/postman:/etc/newman --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-purchase-reverse
+            docker run -v $CIRCLE_WORKING_DIRECTORY/test/postman:/etc/newman --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder Lookup-timeout-retry-confirm
+            docker run -v $CIRCLE_WORKING_DIRECTORY/test/postman:/etc/newman --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Key change requests"
+            docker run -v $CIRCLE_WORKING_DIRECTORY/test/postman:/etc/newman --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Fault reports"
+            docker run -v $CIRCLE_WORKING_DIRECTORY/test/postman:/etc/newman --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Meter lookups"
+            docker run -v $CIRCLE_WORKING_DIRECTORY/test/postman:/etc/newman --network container:test-server -t postman/newman:alpine run $COLLECTION.postman_collection.json -e PPUlocalhosttest.postman_environment.json --folder "Unmatched advices"
       - run:
           name: Save docker image for persisting
           command: |
