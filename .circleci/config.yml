@@ -28,7 +28,7 @@ jobs:
           name: Build test server image and start an instance up
           command: |
             docker build -t $CIRCLE_PROJECT_REPONAME ./target
-            docker run -a -d -p 8080:8080 --name test-server $CIRCLE_PROJECT_REPONAME
+            docker run -d -p 8080:8080 --name test-server $CIRCLE_PROJECT_REPONAME
             docker ps -a
       - run:
           name: Create dummy container with volume containing postman files
