@@ -1,9 +1,9 @@
 package io.electrum.pputestserver.backend;
 
-import javax.ws.rs.core.Response;
-
 import io.electrum.pputestserver.validation.ValidationResult;
 import io.electrum.prepaidutility.model.ErrorDetail;
+
+import javax.ws.rs.core.Response;
 
 public class ErrorDetailFactory {
    public static Response getIllFormattedMessageErrorDetail(ValidationResult result) {
@@ -36,6 +36,14 @@ public class ErrorDetailFactory {
       errorDetail.setErrorMessage("Unknown meter ID");
       errorDetail.setDetailMessage("This meter ID was not recognised by the system: " + meterId);
       return Response.status(Response.Status.BAD_REQUEST).entity(errorDetail).build();
+   }
+
+   public static Response getUnknownMeterIdErrorDetail(String meterId, Response.Status status) {
+      ErrorDetail errorDetail = new ErrorDetail();
+      errorDetail.setErrorType(ErrorDetail.ErrorType.UNKNOWN_METER_ID);
+      errorDetail.setErrorMessage("Unknown meter ID");
+      errorDetail.setDetailMessage("This meter ID was not recognised by the system: " + meterId);
+      return Response.status(status).entity(errorDetail).build();
    }
 
    public static Response getInvalidRequestAmount() {
