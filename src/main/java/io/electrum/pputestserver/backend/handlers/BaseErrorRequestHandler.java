@@ -3,11 +3,11 @@ package io.electrum.pputestserver.backend.handlers;
 import io.electrum.pputestserver.backend.exceptions.UnknownMeterException;
 import io.electrum.prepaidutility.model.Meter;
 
-public abstract class AErrorRequestHandler<T> implements IErrorRequestHandler<T> {
+public abstract class BaseErrorRequestHandler<T> implements ErrorRequestHandler<T> {
 
-   private final IMeterSupplier<T> meterSupplier;
+   private final MeterSupplier<T> meterSupplier;
 
-   public AErrorRequestHandler(IMeterSupplier<T> meterSupplier) throws UnknownMeterException {
+   public BaseErrorRequestHandler(MeterSupplier<T> meterSupplier) throws UnknownMeterException {
       this.meterSupplier = meterSupplier;
    }
 

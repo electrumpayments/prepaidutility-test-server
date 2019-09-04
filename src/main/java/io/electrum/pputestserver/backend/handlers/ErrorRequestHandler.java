@@ -10,7 +10,8 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-public interface IErrorRequestHandler<T> extends IRequestHandler<T> {
+public interface ErrorRequestHandler<T> extends RequestHandler<T> {
+
    void handleRequest(
          T requestBody,
          String lookupId,

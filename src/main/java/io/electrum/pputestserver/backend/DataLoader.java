@@ -52,32 +52,30 @@ public class DataLoader {
             String meterId = csv.get("meterId");
 
             String shouldFail = csv.get("shouldFail");
-            String errorType = csv.get("errorType");
-            String errorMessage = csv.get("errorMessage");
-
-            String supplyGroupCode = csv.get("supplyGroupCode");
-            String keyRevisionNum = csv.get("keyRevisionNum");
-            String tariffIndex = csv.get("tariffIndex");
-            String tokenTechCode = csv.get("tokenTechCode");
-            String firstName = csv.get("firstName");
-            String lastName = csv.get("lastName");
-            String address = csv.get("address");
-            String utilName = csv.get("utilName");
-            String utilAddress = csv.get("utilAddress");
-            String vatRegNum = csv.get("vatRegNum");
-            String clientId = csv.get("clientId");
-            String utilMessage = csv.get("utilMessage");
-            String maxAmount = csv.get("maxAmount");
-            String minAmount = csv.get("minAmount");
-            String currency = csv.get("currency");
-            String bsstDue = csv.get("bsstDue");
 
             if (Boolean.parseBoolean(shouldFail)) {
                ErrorDetail errorDetail = new ErrorDetail();
-               errorDetail.setErrorType(ErrorDetail.ErrorType.valueOf(errorType));
-               errorDetail.setErrorMessage(errorMessage);
+               errorDetail.setErrorType(ErrorDetail.ErrorType.valueOf(csv.get("errorType")));
+               errorDetail.setErrorMessage(csv.get("errorMessage"));
                errorMapToLoad.put(meterId, errorDetail);
             } else {
+               String supplyGroupCode = csv.get("supplyGroupCode");
+               String keyRevisionNum = csv.get("keyRevisionNum");
+               String tariffIndex = csv.get("tariffIndex");
+               String tokenTechCode = csv.get("tokenTechCode");
+               String firstName = csv.get("firstName");
+               String lastName = csv.get("lastName");
+               String address = csv.get("address");
+               String utilName = csv.get("utilName");
+               String utilAddress = csv.get("utilAddress");
+               String vatRegNum = csv.get("vatRegNum");
+               String clientId = csv.get("clientId");
+               String utilMessage = csv.get("utilMessage");
+               String maxAmount = csv.get("maxAmount");
+               String minAmount = csv.get("minAmount");
+               String currency = csv.get("currency");
+               String bsstDue = csv.get("bsstDue");
+
                Meter meter = new Meter();
                meter.setMeterId(meterId);
                meter.setSupplyGroupCode(supplyGroupCode);
@@ -114,7 +112,6 @@ public class DataLoader {
 
                Boolean bsstDueBool = Boolean.valueOf(bsstDue.toUpperCase());
                response.bsstDue(bsstDueBool);
-
                mapToLoad.put(meter.getMeterId(), response);
             }
          }

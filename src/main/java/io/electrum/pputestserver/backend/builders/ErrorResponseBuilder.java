@@ -5,7 +5,7 @@ import io.electrum.prepaidutility.model.Meter;
 
 import javax.ws.rs.core.Response;
 
-public interface IErrorResponseBuilder<T> {
+public interface ErrorResponseBuilder<T> {
    Response getErrorResponse(T requestBody, Meter meter);
 
    Response getErrorResponseFromException(T requestBody, IMeterException meterException);

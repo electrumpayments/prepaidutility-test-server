@@ -1,11 +1,11 @@
 package io.electrum.pputestserver.backend;
 
-import io.electrum.pputestserver.backend.handlers.IErrorRequestHandler;
-import io.electrum.pputestserver.backend.handlers.IRequestHandler;
+import io.electrum.pputestserver.backend.handlers.ErrorRequestHandler;
+import io.electrum.pputestserver.backend.handlers.RequestHandler;
 
 public interface RequestHandlerFactory<T> {
 
-   public IRequestHandler<T> getRequestHandler();
+   public RequestHandler<T> getRequestHandler();
 
-   public IErrorRequestHandler<T> getErrorRequestHandler();
+   public ErrorRequestHandler<T> getErrorRequestHandler();
 }

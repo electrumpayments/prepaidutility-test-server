@@ -4,7 +4,7 @@ import io.electrum.pputestserver.backend.ErrorDetailFactory;
 import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.backend.builders.ExampleDetailMessage;
-import io.electrum.pputestserver.backend.builders.IResponseBuilder;
+import io.electrum.pputestserver.backend.builders.ResponseBuilder;
 import io.electrum.pputestserver.backend.builders.PurchaseResponseBuilder;
 import io.electrum.pputestserver.backend.exceptions.IMeterException;
 import io.electrum.pputestserver.backend.exceptions.UnknownMeterException;
@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-public class TokenPurchaseRequestHandler implements IRequestHandler<PurchaseRequest> {
+public class TokenPurchaseRequestHandler implements RequestHandler<PurchaseRequest> {
 
    // TODO inject builders etc.
    public TokenPurchaseRequestHandler() {
@@ -161,7 +161,7 @@ public class TokenPurchaseRequestHandler implements IRequestHandler<PurchaseRequ
          /*
           * Build Response
           */
-         IResponseBuilder<PurchaseRequest> purchaseResponseBuilder = new PurchaseResponseBuilder();
+         ResponseBuilder<PurchaseRequest> purchaseResponseBuilder = new PurchaseResponseBuilder();
 
          /*
           * Build and send error response if no match is found

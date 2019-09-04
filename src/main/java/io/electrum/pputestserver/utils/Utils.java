@@ -210,9 +210,10 @@ public class Utils {
       case INVALID_LOYALTY_CARD:
       case TRANSACTION_DECLINED:
       case FUNCTION_NOT_SUPPORTED:
-      case UNABLE_TO_LOCATE_RECORD:
       case TRANSACTION_NOT_SUPPORTED:
          return Response.Status.BAD_REQUEST;
+      case UNABLE_TO_LOCATE_RECORD:
+         return Response.Status.NOT_FOUND;
       case UPSTREAM_UNAVAILABLE:
          return Response.Status.GATEWAY_TIMEOUT;
       case GENERAL_ERROR:

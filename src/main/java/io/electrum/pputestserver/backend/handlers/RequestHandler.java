@@ -7,7 +7,7 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-public interface IRequestHandler<T> {
+public interface RequestHandler<T> {
    void handleRequest(
          T requestBody,
          String lookupId,

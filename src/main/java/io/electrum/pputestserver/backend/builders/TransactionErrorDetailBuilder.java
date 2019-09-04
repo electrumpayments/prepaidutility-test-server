@@ -10,7 +10,7 @@ import io.electrum.vas.model.Transaction;
 
 import javax.ws.rs.core.Response;
 
-public class TransactionErrorDetailBuilder implements IErrorResponseBuilder<Transaction> {
+public class TransactionErrorDetailBuilder implements ErrorResponseBuilder<Transaction> {
 
    @Override
    public Response getErrorResponse(Transaction requestBody, Meter meter) {

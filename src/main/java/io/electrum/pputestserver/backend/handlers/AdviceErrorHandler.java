@@ -1,7 +1,7 @@
 package io.electrum.pputestserver.backend.handlers;
 
 import io.electrum.pputestserver.backend.builders.AdviceErrorDetailBuilder;
-import io.electrum.pputestserver.backend.builders.IErrorResponseBuilder;
+import io.electrum.pputestserver.backend.builders.ErrorResponseBuilder;
 import io.electrum.pputestserver.backend.exceptions.IMeterException;
 import io.electrum.pputestserver.backend.exceptions.UnknownMeterException;
 import io.electrum.vas.model.BasicAdvice;
@@ -13,9 +13,9 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-public class AdviceErrorHandler extends AErrorRequestHandler<BasicAdvice> {
+public class AdviceErrorHandler extends BaseErrorRequestHandler<BasicAdvice> {
 
-   public AdviceErrorHandler(IMeterSupplier<BasicAdvice> meterSupplier) {
+   public AdviceErrorHandler(MeterSupplier<BasicAdvice> meterSupplier) {
       super(meterSupplier);
    }
 
@@ -30,7 +30,7 @@ public class AdviceErrorHandler extends AErrorRequestHandler<BasicAdvice> {
          HttpHeaders httpHeaders,
          UriInfo uriInfo)
          throws UnknownMeterException {
-      IErrorResponseBuilder<BasicAdvice> errorResponseBuilder = new AdviceErrorDetailBuilder();
+      ErrorResponseBuilder<BasicAdvice> errorResponseBuilder = new AdviceErrorDetailBuilder();
       asyncResponse.resume(errorResponseBuilder.getErrorResponse(requestBody, getMeter(requestBody)));
    }
 
@@ -45,7 +45,7 @@ public class AdviceErrorHandler extends AErrorRequestHandler<BasicAdvice> {
          HttpHeaders httpHeaders,
          UriInfo uriInfo,
          IMeterException exception) {
-      IErrorResponseBuilder<BasicAdvice> errorResponseBuilder = new AdviceErrorDetailBuilder();
+      ErrorResponseBuilder<BasicAdvice> errorResponseBuilder = new AdviceErrorDetailBuilder();
       asyncResponse.resume(errorResponseBuilder.getErrorResponseFromException(requestBody, exception));
    }
 }

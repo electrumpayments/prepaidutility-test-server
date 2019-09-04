@@ -10,7 +10,7 @@ import io.electrum.vas.model.BasicAdvice;
 
 import javax.ws.rs.core.Response;
 
-public class AdviceErrorDetailBuilder implements IErrorResponseBuilder<BasicAdvice> {
+public class AdviceErrorDetailBuilder implements ErrorResponseBuilder<BasicAdvice> {
 
    @Override
    public Response getErrorResponse(BasicAdvice requestBody, Meter meter) {

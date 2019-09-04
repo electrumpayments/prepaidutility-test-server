@@ -9,7 +9,7 @@ import io.electrum.prepaidutility.model.PurchaseResponse;
 
 import javax.ws.rs.core.Response;
 
-public class PurchaseResponseBuilder implements IResponseBuilder<PurchaseRequest> {
+public class PurchaseResponseBuilder implements ResponseBuilder<PurchaseRequest> {
 
    @Override
    public Response getResponsePayload(PurchaseRequest requestBody) throws UnknownMeterException {

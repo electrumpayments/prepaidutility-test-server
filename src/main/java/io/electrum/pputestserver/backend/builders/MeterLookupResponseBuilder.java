@@ -9,7 +9,7 @@ import io.electrum.prepaidutility.model.MeterLookupResponse;
 
 import javax.ws.rs.core.Response;
 
-public class MeterLookupResponseBuilder implements IResponseBuilder<MeterLookupRequest> {
+public class MeterLookupResponseBuilder implements ResponseBuilder<MeterLookupRequest> {
 
    @Override
    public Response getResponsePayload(MeterLookupRequest requestBody) throws UnknownMeterException {
