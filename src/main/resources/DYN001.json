@@ -1,0 +1,20 @@
+{
+  "utilityType": "Electricity",
+  "debtRecoveryCharges": [
+    {
+      "amount": {
+        "amount": 4300,
+        "currency": 710,
+        "tax": 700,
+        "taxType": "VAT",
+        "taxRate": 15.0
+      },
+      "descrition": "Municipal rates arrears",
+      "balance": {
+        "amount": 0,
+        "currency": 710
+      },
+      "receiptNum": "RCT70002"
+    }
+  ]
+}

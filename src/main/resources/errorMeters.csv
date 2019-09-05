@@ -1,0 +1,9 @@
+meterId,errorType,errorMessage
+ERR001 ,FUNCTION_NOT_SUPPORTED   ,"Function Not Avail."
+ERR002 ,GENERAL_ERROR            ,"Processing failed"
+ERR003 ,ROUTING_ERROR            ,"No route to remote"
+ERR004 ,TRANSACTION_NOT_SUPPORTED,"Unsupported transaction"
+ERR005 ,UPSTREAM_UNAVAILABLE     ,"Cannot reach remote"
+ERR006 ,TRANSACTION_DECLINED     ,"Transaction declined"
+ERR007 ,INVALID_MERCHANT         ,"Invalid merchant"
+ERR008 ,DO_NOT_HONOR             ,"Do not honour"

@@ -3,7 +3,7 @@ package io.electrum.pputestserver.resources;
 import io.electrum.pputestserver.backend.ErrorDetailFactory;
 import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
-import io.electrum.pputestserver.backend.handlers.TokenPurchaseRequestHandler;
+import io.electrum.pputestserver.backend.handlers.PurchaseRequestHandler;
 import io.electrum.pputestserver.utils.Utils;
 import io.electrum.prepaidutility.api.ITokenPurchasesResource;
 import io.electrum.prepaidutility.api.TokenPurchasesResource;
@@ -103,7 +103,7 @@ public class TokenPurchasesResourceImpl extends TokenPurchasesResource implement
        * Log incoming message trace
        */
       Utils.logMessageTrace(requestBody);
-      new TokenPurchaseRequestHandler().handleRequest(
+      new PurchaseRequestHandler().handleRequest(
             requestBody,
             purchaseId,
             securityContext,

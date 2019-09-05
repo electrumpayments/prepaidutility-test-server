@@ -4,8 +4,8 @@ import io.electrum.pputestserver.backend.ErrorDetailFactory;
 import io.electrum.pputestserver.backend.MockResponseTemplates;
 import io.electrum.pputestserver.backend.MockServerDb;
 import io.electrum.pputestserver.backend.builders.ExampleDetailMessage;
-import io.electrum.pputestserver.backend.builders.ResponseBuilder;
 import io.electrum.pputestserver.backend.builders.PurchaseResponseBuilder;
+import io.electrum.pputestserver.backend.builders.ResponseBuilder;
 import io.electrum.pputestserver.backend.exceptions.IMeterException;
 import io.electrum.pputestserver.backend.exceptions.UnknownMeterException;
 import io.electrum.pputestserver.utils.Utils;
@@ -25,10 +25,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
-public class TokenPurchaseRequestHandler implements RequestHandler<PurchaseRequest> {
+public class PurchaseRequestHandler implements RequestHandler<PurchaseRequest> {
 
    // TODO inject builders etc.
-   public TokenPurchaseRequestHandler() {
+   public PurchaseRequestHandler() {
    }
 
    @Override
@@ -80,12 +80,70 @@ public class TokenPurchaseRequestHandler implements RequestHandler<PurchaseReque
           */
          Meter meter = requestBody.getMeter();
 
+         ResponseBuilder<PurchaseRequest> responseBuilder;
          /*
-          * Simulate timeout for retry scenarios
+          * Is this a dynamic scenario?
           */
-         if (isRetry(meter.getMeterId())) {
-            try {
-               Thread.sleep(30000);
+         if (MockResponseTemplates.isDynamicScenario(meter.getMeterId(), "purchaseRequest")) {
+            /*
+             * Get ResponseBuilder
+             */
+            responseBuilder =
+                  (ResponseBuilder<PurchaseRequest>) MockResponseTemplates
+                        .getDynamicResponseBuilder(meter.getMeterId(), "purchaseRequest");
+         } else {
+
+            /*
+             * Get ResponseBuilder
+             */
+            responseBuilder = new PurchaseResponseBuilder();
+
+            /*
+             * Simulate timeout for retry scenarios
+             */
+            if (isRetry(meter.getMeterId())) {
+               try {
+                  Thread.sleep(30000);
+                  new TransactionErrorHandler(req -> ((PurchaseRequest) req).getMeter()).handleRequest(
+                        requestBody,
+                        purchaseId,
+                        securityContext,
+                        asyncResponse,
+                        request,
+                        httpServletRequest,
+                        httpHeaders,
+                        uriInfo,
+                        new IMeterException() {
+                           @Override
+                           public Meter getMeter() {
+                              return requestBody.getMeter();
+                           }
+
+                           @Override
+                           public Response buildErrorDetailResponse(
+                                 String msgId,
+                                 String originalMsgId,
+                                 ErrorDetail.RequestType requestType,
+                                 Meter meter) {
+                              ErrorDetail errorDetail =
+                                    (ErrorDetail) ErrorDetailFactory.getUpstreamTimeout().getEntity();
+                              errorDetail.setDetailMessage(new ExampleDetailMessage());
+                              errorDetail.setId(msgId);
+                              errorDetail.setOriginalId(originalMsgId);
+                              errorDetail.setRequestType(requestType);
+                              return Response.status(Response.Status.GATEWAY_TIMEOUT).entity(errorDetail).build();
+                           }
+                        });
+                  return;
+               } catch (InterruptedException e) {
+                  e.printStackTrace();
+               }
+            }
+
+            /*
+             * Check that request amount matches that specified for test case
+             */
+            if (!Utils.isValidRequestAmount(requestBody, meter.getMeterId())) {
                new TransactionErrorHandler(req -> ((PurchaseRequest) req).getMeter()).handleRequest(
                      requestBody,
                      purchaseId,
@@ -107,7 +165,8 @@ public class TokenPurchaseRequestHandler implements RequestHandler<PurchaseReque
                               String originalMsgId,
                               ErrorDetail.RequestType requestType,
                               Meter meter) {
-                           ErrorDetail errorDetail = (ErrorDetail) ErrorDetailFactory.getUpstreamTimeout().getEntity();
+                           ErrorDetail errorDetail =
+                                 (ErrorDetail) ErrorDetailFactory.getInvalidRequestAmount().getEntity();
                            errorDetail.setDetailMessage(new ExampleDetailMessage());
                            errorDetail.setId(msgId);
                            errorDetail.setOriginalId(originalMsgId);
@@ -116,58 +175,14 @@ public class TokenPurchaseRequestHandler implements RequestHandler<PurchaseReque
                         }
                      });
                return;
-            } catch (InterruptedException e) {
-               e.printStackTrace();
             }
          }
-
-         /*
-          * Check that request amount matches that specified for test case
-          */
-         if (!Utils.isValidRequestAmount(requestBody, meter.getMeterId())) {
-            new TransactionErrorHandler(req -> ((PurchaseRequest) req).getMeter()).handleRequest(
-                  requestBody,
-                  purchaseId,
-                  securityContext,
-                  asyncResponse,
-                  request,
-                  httpServletRequest,
-                  httpHeaders,
-                  uriInfo,
-                  new IMeterException() {
-                     @Override
-                     public Meter getMeter() {
-                        return requestBody.getMeter();
-                     }
-
-                     @Override
-                     public Response buildErrorDetailResponse(
-                           String msgId,
-                           String originalMsgId,
-                           ErrorDetail.RequestType requestType,
-                           Meter meter) {
-                        ErrorDetail errorDetail =
-                              (ErrorDetail) ErrorDetailFactory.getInvalidRequestAmount().getEntity();
-                        errorDetail.setDetailMessage(new ExampleDetailMessage());
-                        errorDetail.setId(msgId);
-                        errorDetail.setOriginalId(originalMsgId);
-                        errorDetail.setRequestType(requestType);
-                        return Response.status(Response.Status.GATEWAY_TIMEOUT).entity(errorDetail).build();
-                     }
-                  });
-            return;
-         }
-
-         /*
-          * Build Response
-          */
-         ResponseBuilder<PurchaseRequest> purchaseResponseBuilder = new PurchaseResponseBuilder();
 
          /*
           * Build and send error response if no match is found
           */
          try {
-            asyncResponse.resume(purchaseResponseBuilder.getResponsePayload(requestBody));
+            asyncResponse.resume(responseBuilder.getResponsePayload(requestBody));
          } catch (UnknownMeterException e) {
             new TransactionErrorHandler(req -> ((MeterLookupRequest) req).getMeter()).handleRequest(
                   requestBody,

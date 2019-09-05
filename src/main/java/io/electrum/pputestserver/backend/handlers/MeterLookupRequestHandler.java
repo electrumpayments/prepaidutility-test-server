@@ -51,6 +51,8 @@ public class MeterLookupRequestHandler implements RequestHandler<MeterLookupRequ
          return;
       }
 
+      ResponseBuilder<MeterLookupRequest> responseBuilder;
+
       /*
        * Check if this is an error scenario and hand off to error handler if it is
        */
@@ -64,30 +66,37 @@ public class MeterLookupRequestHandler implements RequestHandler<MeterLookupRequ
                httpServletRequest,
                httpHeaders,
                uriInfo);
+      }
+      if (MockResponseTemplates.isDynamicScenario(requestBody.getMeter().getMeterId(), "meterLookup")) {
+         /*
+          * Get ResponseBuilder
+          */
+         responseBuilder =
+               (ResponseBuilder<MeterLookupRequest>) MockResponseTemplates
+                     .getDynamicResponseBuilder(requestBody.getMeter().getMeterId(), "meterLookup");
       } else {
 
          /*
           * Build Response
           */
-         ResponseBuilder<MeterLookupRequest> meterLookupResponseBuilder = new MeterLookupResponseBuilder();
-
-         /*
-          * Build and send error response if no match is found
-          */
-         try {
-            asyncResponse.resume(meterLookupResponseBuilder.getResponsePayload(requestBody));
-         } catch (UnknownMeterException e) {
-            new TransactionErrorHandler(req -> ((MeterLookupRequest) req).getMeter()).handleRequest(
-                  requestBody,
-                  lookupId,
-                  securityContext,
-                  asyncResponse,
-                  request,
-                  httpServletRequest,
-                  httpHeaders,
-                  uriInfo,
-                  e);
-         }
+         responseBuilder = new MeterLookupResponseBuilder();
+      }
+      /*
+       * Build and send error response if no match is found
+       */
+      try {
+         asyncResponse.resume(responseBuilder.getResponsePayload(requestBody));
+      } catch (UnknownMeterException e) {
+         new TransactionErrorHandler(req -> ((MeterLookupRequest) req).getMeter()).handleRequest(
+               requestBody,
+               lookupId,
+               securityContext,
+               asyncResponse,
+               request,
+               httpServletRequest,
+               httpHeaders,
+               uriInfo,
+               e);
       }
    }
 }

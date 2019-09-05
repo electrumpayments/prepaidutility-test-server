@@ -1,0 +1,21 @@
+{
+	"utilityType": "Electricity",
+	"tokens": 
+	[
+		{
+			"tokenType": "STD",
+			"units": 73.8,
+			"amount": 
+			{
+				"amount": 8600,
+				"currency": 710,
+				"tax": 1400,
+				"taxType": "VAT",
+				"taxRate": 14.0
+			},
+
+			"receiptNum": "RCT10001",
+			"token": "00000000000000000000"
+		}
+	]
+}

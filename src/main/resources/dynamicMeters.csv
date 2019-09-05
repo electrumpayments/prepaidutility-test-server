@@ -1,0 +1,20 @@
+meterId,responseBuilders
+DYN001 ,purchaseRequest:io.electrum.pputestserver.backend.builders.AllDebtNoTokensPurchaseResponseBuilder
+DYN002 ,purchaseRequest:io.electrum.pputestserver.backend.builders.PurchaseReceiverAndSettlementEntityResponseBuilder|meterLookup:io.electrum.pputestserver.backend.builders.MeterLookupReceiverAndSettlementEntityResponseBuilder
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

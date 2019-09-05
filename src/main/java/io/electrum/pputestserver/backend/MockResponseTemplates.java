@@ -1,5 +1,9 @@
 package io.electrum.pputestserver.backend;
 
+import io.electrum.pputestserver.backend.builders.ResponseBuilder;
+import io.electrum.pputestserver.backend.scenarios.dynamic.DynamicDataLoader;
+import io.electrum.pputestserver.backend.scenarios.error.ErrorDataLoader;
+import io.electrum.pputestserver.backend.scenarios.normal.DataLoader;
 import io.electrum.pputestserver.utils.Utils;
 import io.electrum.prepaidutility.model.ErrorDetail;
 import io.electrum.prepaidutility.model.KeyChangeTokenResponse;
@@ -8,6 +12,7 @@ import io.electrum.prepaidutility.model.PurchaseResponse;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -30,6 +35,8 @@ public class MockResponseTemplates {
    private static HashMap<String, MeterLookupResponse> meterLookupResponses = new HashMap<>();
    private static HashMap<String, ErrorDetail> errorDetailResponses = new HashMap<>();
    private static HashMap<String, PurchaseResponse> purchaseResponses = new HashMap<>();
+   private static HashMap<String, HashMap<String, ResponseBuilder<?>>> dynamicResponses = new HashMap<>();
+   private static HashMap<String, PurchaseResponse> partialPurchaseResponses = new HashMap<>();
 
    public static MeterLookupResponse getMeterLookupResponse(String meterId) {
       return meterLookupResponses.get(meterId);
@@ -43,6 +50,14 @@ public class MockResponseTemplates {
       return purchaseResponses.get(meterId);
    }
 
+   public static PurchaseResponse getPartialPurchaseResponse(String meterId) {
+      return partialPurchaseResponses.get(meterId);
+   }
+
+   public static ResponseBuilder<?> getDynamicResponseBuilder(String meterId, String type) {
+      return dynamicResponses.get(meterId).get(type);
+   }
+
    public static Optional<ErrorDetail> getErrorDetailResponse(String meterId) {
       return Optional.ofNullable(errorDetailResponses.get(meterId));
    }
@@ -51,13 +66,22 @@ public class MockResponseTemplates {
       return errorDetailResponses.containsKey(meterId);
    }
 
+   public static boolean isDynamicScenario(String meterId, String type) {
+      return dynamicResponses.containsKey(meterId) && dynamicResponses.get(meterId).containsKey(type);
+   }
+
    public static KeyChangeTokenResponse getKctResponse() throws IOException {
       return readKctResponseFromFile();
    }
 
-   public static void init() throws IOException {
-      DataLoader.loadMeterData(meterLookupResponses, errorDetailResponses, "meters.csv");
+   public static void init()
+         throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException,
+         InstantiationException, IllegalAccessException {
+      DataLoader.loadMeterData(meterLookupResponses, "meters.csv");
+      ErrorDataLoader.loadMeterData(errorDetailResponses, "errorMeters.csv");
       DataLoader.loadPurchaseResponses(meterLookupResponses, purchaseResponses);
+      DynamicDataLoader.loadMeterData(dynamicResponses, "dynamicMeters.csv");
+      DynamicDataLoader.loadPartialPurchaseResponses(dynamicResponses.keySet(), partialPurchaseResponses);
    }
 
    private static KeyChangeTokenResponse readKctResponseFromFile() throws IOException {
