@@ -34,7 +34,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <prepaidutility-version>3.5.2</prepaidutility-version>
     <service-interface-base-version>3.12.1</service-interface-base-version>
-    <jetty-version>9.4.14.v20181114</jetty-version>
+    <jetty-version>9.4.34.v20201102</jetty-version>
     <jersey-version>2.25</jersey-version>
     <joda-time-version>2.9.4</joda-time-version>
   </properties>
