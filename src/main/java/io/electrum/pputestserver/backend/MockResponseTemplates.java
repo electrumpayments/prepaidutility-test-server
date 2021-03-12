@@ -1,18 +1,20 @@
 package io.electrum.pputestserver.backend;
 
+import io.electrum.pputestserver.utils.Utils;
+import io.electrum.prepaidutility.model.ErrorDetail;
+import io.electrum.prepaidutility.model.KeyChangeTokenResponse;
+import io.electrum.prepaidutility.model.MeterLookupResponse;
+import io.electrum.prepaidutility.model.PurchaseResponse;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.electrum.pputestserver.utils.Utils;
-import io.electrum.prepaidutility.model.KeyChangeTokenResponse;
-import io.electrum.prepaidutility.model.MeterLookupResponse;
-import io.electrum.prepaidutility.model.PurchaseResponse;
 
 /**
  * Contains predefined response message objects corresponding to specific test scenarios. The meter ID in the request
@@ -26,12 +28,13 @@ public class MockResponseTemplates {
    private static Logger logger = LoggerFactory.getLogger(DataLoader.class);
 
    private static HashMap<String, MeterLookupResponse> meterLookupResponses = new HashMap<>();
+   private static HashMap<String, ErrorDetail> errorDetailResponses = new HashMap<>();
    private static HashMap<String, PurchaseResponse> purchaseResponses = new HashMap<>();
 
    public static MeterLookupResponse getMeterLookupResponse(String meterId) {
       return meterLookupResponses.get(meterId);
    }
-   
+
    public static boolean meterExists(String meterId) {
       return meterLookupResponses.containsKey(meterId);
    }
@@ -40,12 +43,20 @@ public class MockResponseTemplates {
       return purchaseResponses.get(meterId);
    }
 
+   public static Optional<ErrorDetail> getErrorDetailResponse(String meterId) {
+      return Optional.ofNullable(errorDetailResponses.get(meterId));
+   }
+
+   public static boolean isErrorScenario(String meterId) {
+      return errorDetailResponses.containsKey(meterId);
+   }
+
    public static KeyChangeTokenResponse getKctResponse() throws IOException {
       return readKctResponseFromFile();
    }
 
    public static void init() throws IOException {
-      DataLoader.loadMeterData(meterLookupResponses, "meters.csv");
+      DataLoader.loadMeterData(meterLookupResponses, errorDetailResponses, "meters.csv");
       DataLoader.loadPurchaseResponses(meterLookupResponses, purchaseResponses);
    }
 
